@@ -59,8 +59,8 @@ h3 {
 .grid {
     display: flex;
     flex-wrap: wrap;
-    width: 580px;
-    height: 580px;
+    width: 568px;
+    height: 568px;
     border: solid 4px #2121FF;
     margin: 20px auto;
     background-color: #000000;
@@ -93,13 +93,18 @@ h3 {
     animation: blink 0.4s infinite;
 }
 
-.pac-man {
-    background-color: #FFFF00;
-    border-radius: 50%;
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 50%, 100% 50%);
-    animation: eat 0.4s infinite linear;
-}
 
+/* HTML: <div class="pacman"></div> */
+.pac-man {
+    height: 120px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: 
+      radial-gradient(6% 6% at 60% 25%,#000 90%,#0000),
+      radial-gradient(circle at 35% 35%,#0000,70%,#0005) #fc0;
+    clip-path: polygon(0 0,100% 0,100% 25%,50% 50%,100% 75%,100% 100%,0 100%);
+}
+  
 /* Ghost styles with classic colors */
 .ghost {
     border-radius: 10px 10px 2px 2px;
@@ -122,9 +127,9 @@ h3 {
     background-color: #FFB852; /* Clyde's orange */
 }
 
-.scared-ghost {
-    background-color: #2121FF;
-    animation: flash 0.4s infinite;
+.ghost-lair {
+    background-color: black;
+    /* animation: flash 0.4s infinite; */
 }
 
 /* Animations */
