@@ -63,6 +63,7 @@ function createGrid() {
                 break;
             case 2:
                 square.classList.add("ghost-lair");
+                square.textContent = "👻"
                 break;
             case 3:
                 square.classList.add("power-pellet");
@@ -143,25 +144,32 @@ function startGame() {
     const squares = document.querySelectorAll(".grid div");
     const startIndex = pacManPosition.y * width + pacManPosition.x;
     squares[startIndex].classList.add("pac-man");
+    console.log(squares[startIndex])
     lastFrameTime = performance.now();
     animationId = requestAnimationFrame(gameLoop);
 }
 
 document.addEventListener("keydown", (e) => {
+    const pac = document.querySelector(".pac-man");
+    if (!pac) return; // Ensure Pac-Man element exists
+
     switch (e.key) {
         case "ArrowUp":
             pacManVelocity = { x: 0, y: -1 };
+            pac.style.transform = "rotate(-90deg)"; // Rotate to face upwards
             break;
         case "ArrowDown":
             pacManVelocity = { x: 0, y: 1 };
+            pac.style.transform = "rotate(90deg)"; // Rotate to face downwards
             break;
         case "ArrowLeft":
             pacManVelocity = { x: -1, y: 0 };
+            pac.style.transform = "rotate(180deg)"; // Rotate to face left
             break;
         case "ArrowRight":
             pacManVelocity = { x: 1, y: 0 };
+            pac.style.transform = "rotate(0deg)"; // Rotate to face right
             break;
     }
 });
-
 startGame();
