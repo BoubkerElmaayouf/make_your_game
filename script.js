@@ -1,5 +1,5 @@
 let animationId;
-let pacManPosition = { x: 1, y: 1 }; // Initial position
+let pacManPosition = { x: 410, y: 3 }; // Initial position
 let pacManVelocity = { x: 0, y: 0 }; // Movement direction
 let score = 0;
 let lifes = 3;
@@ -77,6 +77,7 @@ function createGrid() {
 function movePacMan() {
     const squares = document.querySelectorAll(".grid div");
     const currentIndex = pacManPosition.y * width + pacManPosition.x;
+    console.log(pacManPosition.y)
 
     // Clear previous position
     squares[currentIndex].classList.remove("pac-man");
@@ -156,20 +157,27 @@ document.addEventListener("keydown", (e) => {
     switch (e.key) {
         case "ArrowUp":
             pacManVelocity = { x: 0, y: -1 };
-            pac.style.transform = "rotate(-90deg)"; // Rotate to face upwards
+            pac.style.transform = "rotate(-90deg)";
             break;
         case "ArrowDown":
             pacManVelocity = { x: 0, y: 1 };
-            pac.style.transform = "rotate(90deg)"; // Rotate to face downwards
+            pac.style.transform = "rotate(90deg)";
             break;
         case "ArrowLeft":
             pacManVelocity = { x: -1, y: 0 };
-            pac.style.transform = "rotate(180deg)"; // Rotate to face left
+            pac.style.transform = "rotate(180deg)"; 
             break;
         case "ArrowRight":
             pacManVelocity = { x: 1, y: 0 };
-            pac.style.transform = "rotate(0deg)"; // Rotate to face right
+            pac.style.transform = "rotate(0deg)";
+            break;
+        case " ": // Spacebar
+            pacManVelocity = { x: 0, y: 0 };
+            pac.style.transform = "rotate(0deg)";
+            console.log("Spacebar pressed")
             break;
     }
 });
 startGame();
+
+
