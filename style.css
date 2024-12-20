@@ -1,0 +1,193 @@
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000000;
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #FFFF00;
+}
+
+.hero {
+    text-align: center;
+    padding: 20px;
+    background-color: #000000;
+    border: 4px solid #00F;
+    border-radius: 0;
+    position: relative;
+}
+
+/* Classic Pac-Man logo style header */
+.hero::before {
+    content: "PAC-MAN";
+    display: block;
+    font-size: 2.5rem;
+    color: #FFFF00;
+    text-shadow: 
+        2px 2px #FF0000,
+        -2px -2px #00FFFF,
+        2px -2px #FFB8FF,
+        -2px 2px #FFB852;
+    margin-bottom: 20px;
+    letter-spacing: 4px;
+}
+
+/* Score display styles */
+h3 {
+    color: #FFFF00;
+    font-size: 1.2rem;
+    margin: 10px 0;
+    display: inline-block;
+    margin-right: 20px;
+    text-transform: uppercase;
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+}
+
+#score, #lifes, #Time {
+    color: #FFFFFF;
+    margin-left: 5px;
+}
+
+/* Game grid styles */
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    width: 580px;
+    height: 580px;
+    border: solid 4px #2121FF;
+    margin: 20px auto;
+    background-color: #000000;
+    box-shadow: 0 0 20px #2121FF;
+}
+
+/* Individual grid cell */
+.grid div {
+    width: 20px;
+    height: 20px;
+}
+
+/* Game elements */
+.pac-dot {
+    background-color: #FFFF00;
+    border: 8px solid #000000;
+    border-radius: 50%;
+}
+
+.wall {
+    background-color: #2121FF;
+    border: 1px solid #2121FF;
+    box-shadow: 0 0 5px #2121FF;
+}
+
+.power-pellet {
+    background-color: #FFFF00;
+    border: 5px solid #000000;
+    border-radius: 50%;
+    animation: blink 0.4s infinite;
+}
+
+.pac-man {
+    background-color: #FFFF00;
+    border-radius: 50%;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 50%, 100% 50%);
+    animation: eat 0.4s infinite linear;
+}
+
+/* Ghost styles with classic colors */
+.ghost {
+    border-radius: 10px 10px 2px 2px;
+    position: relative;
+}
+
+.ghost.blinky { 
+    background-color: #FF0000; /* Blinky's red */
+}
+
+.ghost.pinky { 
+    background-color: #FFB8FF; /* Pinky's pink */
+}
+
+.ghost.inky { 
+    background-color: #00FFFF; /* Inky's cyan */
+}
+
+.ghost.clyde { 
+    background-color: #FFB852; /* Clyde's orange */
+}
+
+.scared-ghost {
+    background-color: #2121FF;
+    animation: flash 0.4s infinite;
+}
+
+/* Animations */
+@keyframes eat {
+    0% {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 50%, 100% 50%);
+    }
+    50% {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 100%, 0 0);
+    }
+    100% {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 50%, 100% 50%);
+    }
+}
+
+@keyframes blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0.6; }
+}
+
+@keyframes flash {
+    0%, 49% { background-color: #2121FF; }
+    50%, 100% { background-color: #FFFFFF; }
+}
+
+/* Info section styles */
+.info {
+    color: #FFFF00;
+    margin-top: 20px;
+    padding: 10px;
+    border: 2px solid #2121FF;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+/* Ready! text style */
+.info::before {
+    content: "Ready!";
+    color: #FFFF00;
+    font-size: 1.2rem;
+    display: block;
+    margin-bottom: 10px;
+    animation: blink 1s infinite;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .grid {
+        width: 280px;
+        height: 280px;
+    }
+    
+    .grid div {
+        width: 10px;
+        height: 10px;
+    }
+    
+    h3 {
+        font-size: 0.8rem;
+    }
+    
+    .hero::before {
+        font-size: 1.5rem;
+    }
+}
