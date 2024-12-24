@@ -38,7 +38,7 @@ const layout = [
     1, 0, 1, 1, 1, 1, 0, 1, 1, 4, 1, 2, 2, 2, 2, 2, 2, 1, 4, 1, 1, 0, 1, 1, 1, 1, 0, 1,
     1, 0, 1, 1, 1, 1, 0, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 0, 1, 1, 1, 1, 0, 1,
     1, 0, 1, 1, 1, 1, 0, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 0, 1, 1, 1, 1, 0, 1,
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 5, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1,
     1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1,
     1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1,
     1, 3, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 3, 1,
@@ -57,8 +57,7 @@ function createGrid() {
     layout.forEach((cell, index) => {
         const square = document.createElement("div");
         switch(cell) {
-            case 0:
-                
+            case 0:   
                 square.classList.add("pac-dot");
                 break;
             case 1:
@@ -66,7 +65,9 @@ function createGrid() {
                 break;
             case 2:
                 square.classList.add("ghost-lair");
-                console.log(index);
+                // square.textContent = index
+                square.setAttribute("data-index", index);
+                square.setAttribute("data-value", cell);
                 if (index === 347 || index === 352 || index === 408 || index === 403) {
                     square.classList.add("ghost");
                     if (index === 347) square.classList.add("pinky");
@@ -82,6 +83,11 @@ function createGrid() {
                 square.classList.add("pac-man");
                 break;
             // case 4 is empty, no class needed
+        }
+        if (index === 489) {
+            square.classList.add("pac-man");
+            // square.style.height = "16px"
+            // square.style.width = "16px"
         }
         grid.appendChild(square);
     });
@@ -136,6 +142,36 @@ function movePacMan() {
         // Check collectibles at new position
         checkCollectibles(pacManRect);
     }
+}
+
+const ghostPosition = { x: 0, y: 0 };
+const ghostRotation = 0;
+
+// function randomposition() {
+//     const ghosts = document.querySelectorAll(".ghost");
+//     ghosts.forEach((ghost) => {
+//         ghostPosition.x = Math.floor(Math.random() * width) * 20;
+//         ghostPosition.y = Math.floor(Math.random() * width) * 20;
+//         ghost.style.transform = `translate(${ghostPosition.x}px, ${ghostPosition.y}px)`;
+//     });
+// }
+
+function ghostMove() {
+    const ghosts = document.querySelectorAll(".ghost");
+    ghosts.forEach((ghost) => {
+        // randomposition()
+        console.log("ghost classes" , ghost);
+        // check for every ghost pinky blinky inky clyde, and move them
+        if (ghost.classList.contains("pinky")) {
+            ghost.style.transform = `translate(${ghostPosition.x + 0}px, ${ghostPosition.y + 0}px)`;
+        }else if (ghost.classList.contains("blinky")) {
+            ghost.style.transform = `translate(${ghostPosition.x + 0}px, ${ghostPosition.y - 0}px)`;
+        } else if (ghost.classList.contains("inky")) {
+            ghost.style.transform = `translate(${ghostPosition.x + 0}px, ${ghostPosition.y + 0}px)`;
+        } else if (ghost.classList.contains("clyde")) {
+            ghost.style.transform = `translate(${ghostPosition.x + 0}px, ${ghostPosition.y + 0}px)`;
+        }
+    });
 }
 
 function checkCollectibles(pacManRect) {
@@ -200,35 +236,38 @@ let isGameStarted = false;
 document.addEventListener("DOMContentLoaded", () => {
     const startButton = document.getElementById("start-button");
     const audio = document.getElementById("audio");
+    const pattern = document.getElementById("pattern");
     // const death = document.getElementById("death");
+    // console.log(isGameStarted)
+    if (!isGameStarted) {
+        pattern.style.display = "block";
+        audio.play();
+    }
 
     startButton.addEventListener("click", () => {
+     
         if (!isGameStarted) {
+            pattern.style.display = "none";
+
             isGameStarted = true;
             startButton.textContent = "Restart";
-            audio.play();
+            audio.pause();
             createGrid();
             startGame();
         } else {
-            // Restart the game logic
-            audio.pause();
-            // death.play();
             document.location.reload();
         }
     });
 });
-
-
-
-
 
 function startGame() {
     score = 0;
     scoreDisplay.textContent = score;
     lifesDisplay.textContent = lifes;
     timeDisplay.textContent = 0;
+    ghostMove()
 
-    // pacMan.style.transform = `translate(${pacManPosition.x}px, ${pacManPosition.y}px)`;
+    // pacMan.style.transform = `translate( ${pacManPosition.x}px, ${pacManPosition.y}px)`;
     lastFrameTime = performance.now();
     animationId = requestAnimationFrame(gameLoop);
 }
@@ -239,7 +278,7 @@ let currentDirection = 0;
 let isMoving = false;
 
 document.addEventListener("keydown", (e) => {
-    
+    // if (key)
     switch (e.key) {
         case "ArrowUp":
             if (currentDirection !== -90) {
@@ -290,6 +329,5 @@ function stopPacMan() {
     pacManVelocity = { x: 0, y: 0 };
     isMoving = false;
 }
-
 
 startGame();
