@@ -9,6 +9,7 @@ body {
     background-color: #000000;
     font-family: 'Press Start 2P', 'Courier New', monospace;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
@@ -142,7 +143,22 @@ h3 {
     background-color: black;
     /* animation: flash 0.4s infinite; */
 }
-
+#start-button {
+    padding: 20px;
+    background-color: transparent;
+    color: #2121FF;
+    border: 4px solid #2121FF;
+    border-radius: 0;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    margin-bottom: 20px;
+    transition: all 0.3s ease-in-out;
+}
+#start-button:hover {
+    background-color: #2121FF;
+    color: #FFFFFF;
+}
 /* Animations */
 @keyframes eat {
     0% {

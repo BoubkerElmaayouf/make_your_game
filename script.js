@@ -150,6 +150,8 @@ function checkCollectibles(pacManRect) {
         ) {
             // Collect power-pellet
             pellet.classList.remove("power-pellet");
+            const prize  = document.getElementById("prize");
+            prize.play();
             score += 50;
             scoreDisplay.textContent = score;
         }
@@ -166,11 +168,13 @@ function checkCollectibles(pacManRect) {
         ) {
             // Collect pac-dot
             dot.classList.remove("pac-dot");
+            const eat_dots  = document.getElementById("eat-dots");
+            eat_dots.play();
             score += 10;
             scoreDisplay.textContent = score;
         }
     });
-    let pacManVelocity = 5  
+    // let pacManVelocity = 5  
 
 }
 
@@ -191,13 +195,38 @@ function gameLoop(timestamp) {
     animationId = requestAnimationFrame(gameLoop);
 }
 
+let isGameStarted = false;
+
+document.addEventListener("DOMContentLoaded", () => {
+    const startButton = document.getElementById("start-button");
+    const audio = document.getElementById("audio");
+    // const death = document.getElementById("death");
+
+    startButton.addEventListener("click", () => {
+        if (!isGameStarted) {
+            isGameStarted = true;
+            startButton.textContent = "Restart";
+            audio.play();
+            createGrid();
+            startGame();
+        } else {
+            // Restart the game logic
+            audio.pause();
+            // death.play();
+            document.location.reload();
+        }
+    });
+});
+
+
+
+
+
 function startGame() {
     score = 0;
     scoreDisplay.textContent = score;
     lifesDisplay.textContent = lifes;
     timeDisplay.textContent = 0;
-    createGrid();
-     const pacMan = document.querySelector(".pac-man")
 
     // pacMan.style.transform = `translate(${pacManPosition.x}px, ${pacManPosition.y}px)`;
     lastFrameTime = performance.now();
