@@ -262,6 +262,5 @@ function stopPacMan() {
     isMoving = false;
 }
 
-// Remove the keyup event listener that was resetting isRotating since we don't need it anymore
 
 startGame();
