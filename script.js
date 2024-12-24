@@ -1,11 +1,13 @@
 let animationId;
-let pacManPosition = { x: 410, y: 3 }; // Initial position
-let pacManVelocity = { x: 0, y: 0 }; // Movement direction
+const pacManPosition = { x: 0, y: 0 };
+let pacManVelocity = { x: 0, y: 0 };
+
 let score = 0;
 let lifes = 3;
 let startTime = Date.now();
-const speed = 200; // Movement speed in milliseconds
+const speed = 50; // Movement speed in pixels per frame
 let lastFrameTime = 0;
+
 
 const grid = document.querySelector(".grid");
 const scoreDisplay = document.getElementById("score");
@@ -32,11 +34,11 @@ const layout = [
     1, 1, 1, 1, 1, 1, 0, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1, 1, 0, 1, 1, 1, 1, 1, 1,
     1, 1, 1, 1, 1, 1, 0, 1, 1, 4, 1, 1, 1, 2, 2, 1, 1, 1, 4, 1, 1, 0, 1, 1, 1, 1, 1, 1,
     1, 1, 1, 1, 1, 1, 0, 1, 1, 4, 1, 2, 2, 2, 2, 2, 2, 1, 4, 1, 1, 0, 1, 1, 1, 1, 1, 1,
-    4, 4, 4, 4, 4, 4, 0, 0, 0, 4, 1, 2, 2, 2, 2, 2, 2, 1, 4, 0, 0, 0, 4, 4, 4, 4, 4, 4,
-    1, 1, 1, 1, 1, 1, 0, 1, 1, 4, 1, 2, 2, 2, 2, 2, 2, 1, 4, 1, 1, 0, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 0, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 0, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 0, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 0, 1, 1, 1, 1, 1, 1,
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 2, 2, 2, 2, 2, 2, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+    1, 0, 1, 1, 1, 1, 0, 1, 1, 4, 1, 2, 2, 2, 2, 2, 2, 1, 4, 1, 1, 0, 1, 1, 1, 1, 0, 1,
+    1, 0, 1, 1, 1, 1, 0, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 0, 1, 1, 1, 1, 0, 1,
+    1, 0, 1, 1, 1, 1, 0, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 0, 1, 1, 1, 1, 0, 1,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 5, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1,
     1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1,
     1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1,
     1, 3, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 3, 1,
@@ -56,6 +58,7 @@ function createGrid() {
         const square = document.createElement("div");
         switch(cell) {
             case 0:
+                
                 square.classList.add("pac-dot");
                 break;
             case 1:
@@ -63,60 +66,112 @@ function createGrid() {
                 break;
             case 2:
                 square.classList.add("ghost-lair");
-                square.textContent = "👻"
+                console.log(index);
+                if (index === 347 || index === 352 || index === 408 || index === 403) {
+                    square.classList.add("ghost");
+                    if (index === 347) square.classList.add("pinky");
+                    if (index === 352) square.classList.add("blinky");
+                    if (index === 408) square.classList.add("inky");
+                    if (index === 403) square.classList.add("clyde");
+                }
                 break;
             case 3:
                 square.classList.add("power-pellet");
+                break;
+            case 5:
+                square.classList.add("pac-man");
                 break;
             // case 4 is empty, no class needed
         }
         grid.appendChild(square);
     });
+    
 }
+let pacManRotation = 0;
 
 function movePacMan() {
-    const squares = document.querySelectorAll(".grid div");
-    const currentIndex = pacManPosition.y * width + pacManPosition.x;
-    console.log(pacManPosition.y)
-
-    // Clear previous position
-    squares[currentIndex].classList.remove("pac-man");
+    const walls = document.querySelectorAll(".wall");
+    const pacMan = document.querySelector(".pac-man");
+    
+    // Store the current position
+    let currentPosition = {
+        x: pacManPosition.x,
+        y: pacManPosition.y
+    };
 
     // Calculate new position
     const newPosition = {
-        x: pacManPosition.x + pacManVelocity.x,
-        y: pacManPosition.y + pacManVelocity.y,
+        x: currentPosition.x + pacManVelocity.x,
+        y: currentPosition.y + pacManVelocity.y
     };
-    const newIndex = newPosition.y * width + newPosition.x;
 
-    // Check for walls and ghost lair
-    if (layout[newIndex] !== 1 && layout[newIndex] !== 2) {
-        pacManPosition = newPosition;
+    // Temporarily move Pac-Man to check for collisions
+    pacMan.style.transform = `translate(${newPosition.x}px, ${newPosition.y}px) rotate(${pacManRotation}deg)`;
+    const pacManRect = pacMan.getBoundingClientRect();
+
+    // Reset to current position
+    pacMan.style.transform = `translate(${currentPosition.x}px, ${currentPosition.y}px) rotate(${pacManRotation}deg)`;
+
+    // Check for wall collisions
+    let collision = false;
+    for (const wall of walls) {
+        const wallRect = wall.getBoundingClientRect();
+        if (
+            pacManRect.left < wallRect.right &&
+            pacManRect.right > wallRect.left &&
+            pacManRect.top < wallRect.bottom &&
+            pacManRect.bottom > wallRect.top
+        ) {
+            collision = true;
+            break;
+        }
     }
 
-    // Update Pac-Man position
-    const finalIndex = pacManPosition.y * width + pacManPosition.x;
-    squares[finalIndex].classList.add("pac-man");
-
-    // Check for collectibles
-    checkCollectibles(squares, finalIndex);
+    if (!collision) {
+        // Update the position if no collision
+        pacManPosition.x = newPosition.x;
+        pacManPosition.y = newPosition.y;
+        pacMan.style.transform = `translate(${pacManPosition.x}px, ${pacManPosition.y}px) rotate(${pacManRotation}deg)`;
+        
+        // Check collectibles at new position
+        checkCollectibles(pacManRect);
+    }
 }
 
-function checkCollectibles(squares, index) {
-    switch(layout[index]) {
-        case 0: // pac-dot
-            layout[index] = 4; // Mark as empty
-            squares[index].classList.remove("pac-dot");
-            score += 10;
-            break;
-        case 3: // power-pellet
-            layout[index] = 4; // Mark as empty
-            squares[index].classList.remove("power-pellet");
+function checkCollectibles(pacManRect) {
+    const powerPellets = document.querySelectorAll(".power-pellet");
+    powerPellets.forEach((pellet) => {
+        const pelletRect = pellet.getBoundingClientRect();
+        if (
+            pacManRect.left < pelletRect.right &&
+            pacManRect.right > pelletRect.left &&
+            pacManRect.top < pelletRect.bottom &&
+            pacManRect.bottom > pelletRect.top
+        ) {
+            // Collect power-pellet
+            pellet.classList.remove("power-pellet");
             score += 50;
-            // Here you could add power pellet logic (making ghosts vulnerable)
-            break;
-    }
-    scoreDisplay.textContent = score;
+            scoreDisplay.textContent = score;
+        }
+    });
+    
+    const pacDots = document.querySelectorAll(".pac-dot");
+    pacDots.forEach((dot) => {
+        const dotRect = dot.getBoundingClientRect();
+        if (
+            pacManRect.left < dotRect.right &&
+            pacManRect.right > dotRect.left &&
+            pacManRect.top < dotRect.bottom &&
+            pacManRect.bottom > dotRect.top
+        ) {
+            // Collect pac-dot
+            dot.classList.remove("pac-dot");
+            score += 10;
+            scoreDisplay.textContent = score;
+        }
+    });
+    let pacManVelocity = 5  
+
 }
 
 function updateTime() {
@@ -142,42 +197,71 @@ function startGame() {
     lifesDisplay.textContent = lifes;
     timeDisplay.textContent = 0;
     createGrid();
-    const squares = document.querySelectorAll(".grid div");
-    const startIndex = pacManPosition.y * width + pacManPosition.x;
-    squares[startIndex].classList.add("pac-man");
-    console.log(squares[startIndex])
+     const pacMan = document.querySelector(".pac-man")
+
+    // pacMan.style.transform = `translate(${pacManPosition.x}px, ${pacManPosition.y}px)`;
     lastFrameTime = performance.now();
     animationId = requestAnimationFrame(gameLoop);
 }
 
-document.addEventListener("keydown", (e) => {
-    const pac = document.querySelector(".pac-man");
-    if (!pac) return; // Ensure Pac-Man element exists
+let isRotating = false;
 
+let currentDirection = 0;
+let isMoving = false;
+
+document.addEventListener("keydown", (e) => {
+    
     switch (e.key) {
         case "ArrowUp":
-            pacManVelocity = { x: 0, y: -1 };
-            pac.style.transform = "rotate(-90deg)";
+            if (currentDirection !== -90) {
+                currentDirection = -90;
+                rotatePacMan(-90);
+            }
+            pacManVelocity = { x: 0, y: -5 };
+            isMoving = true;
             break;
         case "ArrowDown":
-            pacManVelocity = { x: 0, y: 1 };
-            pac.style.transform = "rotate(90deg)";
+            if (currentDirection !== 90) {
+                currentDirection = 90;
+                rotatePacMan(90);
+            }
+            pacManVelocity = { x: 0, y: 5 };
+            isMoving = true;
             break;
         case "ArrowLeft":
-            pacManVelocity = { x: -1, y: 0 };
-            pac.style.transform = "rotate(180deg)"; 
+            if (currentDirection !== 180) {
+                currentDirection = 180;
+                rotatePacMan(180);
+            }
+            pacManVelocity = { x: -5, y: 0 };
+            isMoving = true;
             break;
         case "ArrowRight":
-            pacManVelocity = { x: 1, y: 0 };
-            pac.style.transform = "rotate(0deg)";
+            if (currentDirection !== 0) {
+                currentDirection = 0;
+                rotatePacMan(0);
+            }
+            pacManVelocity = { x: 5, y: 0 };
+            isMoving = true;
             break;
-        case " ": // Spacebar
+        case " ":
             pacManVelocity = { x: 0, y: 0 };
-            pac.style.transform = "rotate(0deg)";
-            console.log("Spacebar pressed")
+            isMoving = false;
             break;
     }
 });
+
+function rotatePacMan(degrees) {
+    const pacMan = document.querySelector(".pac-man");
+    pacManRotation = degrees;
+    pacMan.style.transform = `translate(${pacManPosition.x}px, ${pacManPosition.y}px) rotate(${degrees}deg)`;
+}
+
+function stopPacMan() {
+    pacManVelocity = { x: 0, y: 0 };
+    isMoving = false;
+}
+
+// Remove the keyup event listener that was resetting isRotating since we don't need it anymore
+
 startGame();
-
-

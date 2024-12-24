@@ -57,6 +57,7 @@ h3 {
 
 /* Game grid styles */
 .grid {
+    /* position: relative; */
     display: flex;
     flex-wrap: wrap;
     width: 568px;
@@ -100,9 +101,10 @@ h3 {
     aspect-ratio: 1;
     border-radius: 50%;
     background: 
-      radial-gradient(6% 6% at 60% 25%,#000 90%,#0000),
       radial-gradient(circle at 35% 35%,#0000,70%,#0005) #fc0;
     clip-path: polygon(0 0,100% 0,100% 25%,50% 50%,100% 75%,100% 100%,0 100%);
+    /* transition: rotate 0.2s ease-in-out; */
+    /* z-index: 1;  */;
 }
   
 /* Ghost styles with classic colors */
@@ -111,8 +113,14 @@ h3 {
     position: relative;
 }
 
-.ghost.blinky { 
-    background-color: #FF0000; /* Blinky's red */
+.ghost.blinky {
+    /* background-image: url('./img/ghost.webp');
+    background-size: contain; 
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 20px;  
+    height: 20px; */
+    background-color: red;
 }
 
 .ghost.pinky { 
