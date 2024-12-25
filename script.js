@@ -52,10 +52,14 @@ const layout = [
 ]
 
 const width = 28;
+let indexs = []
 
 function createGrid() {
     layout.forEach((cell, index) => {
+        indexs.push(index)
         const square = document.createElement("div");
+        square.setAttribute("data-index", index);
+        square.setAttribute("data-value", cell);
         switch(cell) {
             case 0:   
                 square.classList.add("pac-dot");
@@ -66,8 +70,6 @@ function createGrid() {
             case 2:
                 square.classList.add("ghost-lair");
                 // square.textContent = index
-                square.setAttribute("data-index", index);
-                square.setAttribute("data-value", cell);
                 if (index === 347 || index === 352 || index === 408 || index === 403) {
                     square.classList.add("ghost");
                     if (index === 347) square.classList.add("pinky");
@@ -91,14 +93,14 @@ function createGrid() {
         }
         grid.appendChild(square);
     });
-    
 }
 let pacManRotation = 0;
 
 function movePacMan() {
     const walls = document.querySelectorAll(".wall");
     const pacMan = document.querySelector(".pac-man");
-    
+    const ghostLair = document.querySelector(".ghost-lair"); // Fixed selector syntax
+
     // Store the current position
     let currentPosition = {
         x: pacManPosition.x,
@@ -118,18 +120,36 @@ function movePacMan() {
     // Reset to current position
     pacMan.style.transform = `translate(${currentPosition.x}px, ${currentPosition.y}px) rotate(${pacManRotation}deg)`;
 
-    // Check for wall collisions
+    // Check for wall collisions and ghost lair collision
     let collision = false;
-    for (const wall of walls) {
-        const wallRect = wall.getBoundingClientRect();
+    
+    // Check ghost lair collision first
+    if (ghostLair) {
+        const ghostLairRect = ghostLair.getBoundingClientRect();
         if (
-            pacManRect.left < wallRect.right &&
-            pacManRect.right > wallRect.left &&
-            pacManRect.top < wallRect.bottom &&
-            pacManRect.bottom > wallRect.top
+            pacManRect.left < ghostLairRect.right &&
+            pacManRect.right > ghostLairRect.left &&
+            pacManRect.top < ghostLairRect.bottom &&
+            pacManRect.bottom > ghostLairRect.top
         ) {
             collision = true;
-            break;
+        }
+    }
+
+    // Check wall collisions if no ghost lair collision
+    if (!collision) {
+        for (const wall of walls) {
+            const wallRect = wall.getBoundingClientRect();
+            
+            if (
+                pacManRect.left < wallRect.right &&
+                pacManRect.right > wallRect.left &&
+                pacManRect.top < wallRect.bottom &&
+                pacManRect.bottom > wallRect.top 
+            ) {
+                collision = true;
+                break;
+            }
         }
     }
 
@@ -233,32 +253,31 @@ function gameLoop(timestamp) {
 
 let isGameStarted = false;
 
-document.addEventListener("DOMContentLoaded", () => {
-    const startButton = document.getElementById("start-button");
-    const audio = document.getElementById("audio");
-    const pattern = document.getElementById("pattern");
-    // const death = document.getElementById("death");
-    // console.log(isGameStarted)
-    if (!isGameStarted) {
-        pattern.style.display = "block";
-        audio.play();
-    }
-
-    startButton.addEventListener("click", () => {
+// document.addEventListener("DOMContentLoaded", () => {
+//     const startButton = document.getElementById("start-button");
+//     const audio = document.getElementById("audio");
+//     const pattern = document.getElementById("pattern");
+//     // const death = document.getElementById("death");
+//     // console.log(isGameStarted)
+//     if (!isGameStarted) {
+//         pattern.style.display = "block";
+//         audio.play();
+//     }
+//     startButton.addEventListener("click", () => {
      
-        if (!isGameStarted) {
-            pattern.style.display = "none";
+//         if (!isGameStarted) {
+//             pattern.style.display = "none";
 
-            isGameStarted = true;
-            startButton.textContent = "Restart";
-            audio.pause();
-            createGrid();
-            startGame();
-        } else {
-            document.location.reload();
-        }
-    });
-});
+//             isGameStarted = true;
+//             startButton.textContent = "Restart";
+//             audio.pause();
+//             createGrid();
+//             startGame();
+//         } else {
+//             document.location.reload();
+//         }
+//     });
+// });
 
 function startGame() {
     score = 0;
@@ -266,6 +285,12 @@ function startGame() {
     lifesDisplay.textContent = lifes;
     timeDisplay.textContent = 0;
     ghostMove()
+    createGrid();
+    const pattern = document.getElementById("pattern");
+    pattern.style.display = "none"
+
+    
+
 
     // pacMan.style.transform = `translate( ${pacManPosition.x}px, ${pacManPosition.y}px)`;
     lastFrameTime = performance.now();
@@ -273,7 +298,6 @@ function startGame() {
 }
 
 let isRotating = false;
-
 let currentDirection = 0;
 let isMoving = false;
 
