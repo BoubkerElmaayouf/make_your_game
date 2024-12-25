@@ -3,51 +3,43 @@ import {
     lifesDisplay,
 } from './start_game.js'
 let pacManRotation = 0;
-const pacManPosition = { x: 0, y: 0 };
+let pacManPosition = { x: 0, y: 0 };
 let pacManVelocity = { x: 0, y: 0 };
 let score = 0;
 let currentDirection = null; // Track current direction
-let nextDirection = null; // Track queued direction
+let nextDirection = {velocity : { x :0 , y : 0 } , rotation : 0}; // Track queued direction
 
 export function movePacMan() {
     const walls = document.querySelectorAll(".wall");
     const pacMan = document.querySelector(".pac-man");
-    const ghostLair = document.querySelector(".ghost-lair"); // Fixed selector syntax
+    const ghostLair = document.querySelector(".ghost-lair");
 
-    // Store the current position
+    // Store current position
     let currentPosition = { x: pacManPosition.x, y: pacManPosition.y };
 
-    // Calculate new position
-    const newPosition = {
-        x: currentPosition.x + pacManVelocity.x,
-        y: currentPosition.y + pacManVelocity.y,
-    };
+    // Helper function to check collisions
+    function checkCollision(position) {
+        // Temporarily move Pac-Man to test collision
+        pacMan.style.transform = `translate(${position.x}px, ${position.y}px) rotate(${pacManRotation}deg)`;
+        const pacManRect = pacMan.getBoundingClientRect();
 
-    // Temporarily move Pac-Man to check for collisions
-    pacMan.style.transform = `translate(${newPosition.x}px, ${newPosition.y}px) rotate(${pacManRotation}deg)`;
-    const pacManRect = pacMan.getBoundingClientRect();
+        // Reset position
+        pacMan.style.transform = `translate(${currentPosition.x}px, ${currentPosition.y}px) rotate(${pacManRotation}deg)`;
 
-    // Reset to current position
-    pacMan.style.transform = `translate(${currentPosition.x}px, ${currentPosition.y}px) rotate(${pacManRotation}deg)`;
-
-    // Check for collisions
-    let collision = false;
-
-    // Check ghost lair collision first
-    if (ghostLair) {
-        const ghostLairRect = ghostLair.getBoundingClientRect();
-        if (
-            pacManRect.left < ghostLairRect.right &&
-            pacManRect.right > ghostLairRect.left &&
-            pacManRect.top < ghostLairRect.bottom &&
-            pacManRect.bottom > ghostLairRect.top
-        ) {
-            collision = true;
+        // Check ghost lair collision
+        if (ghostLair) {
+            const ghostLairRect = ghostLair.getBoundingClientRect();
+            if (
+                pacManRect.left < ghostLairRect.right &&
+                pacManRect.right > ghostLairRect.left &&
+                pacManRect.top < ghostLairRect.bottom &&
+                pacManRect.bottom > ghostLairRect.top
+            ) {
+                return true;
+            }
         }
-    }
 
-    // Check wall collisions if no ghost lair collision
-    if (!collision) {
+        // Check wall collisions
         for (const wall of walls) {
             const wallRect = wall.getBoundingClientRect();
             if (
@@ -56,29 +48,52 @@ export function movePacMan() {
                 pacManRect.top < wallRect.bottom &&
                 pacManRect.bottom > wallRect.top
             ) {
-                collision = true;
-                break;
+                return true;
             }
         }
+
+        return false;
     }
 
-    if (!collision) {
-        // Update the position if no collision
-        pacManPosition.x = newPosition.x;
-        pacManPosition.y = newPosition.y;
-        pacMan.style.transform = `translate(${pacManPosition.x}px, ${pacManPosition.y}px) rotate(${pacManRotation}deg)`;
-    
-        // Check collectibles at new position
-        checkCollectibles(pacManRect);
-    } else if (nextDirection) {
-        // Apply queued direction if the current direction is blocked
+    // Calculate new position for next direction
+    const nextPosition = {
+        x: currentPosition.x + nextDirection.velocity.x,
+        y: currentPosition.y + nextDirection.velocity.y,
+    };
+
+    // Check if next direction is valid
+    if (!checkCollision(nextPosition)) {
+        // Move in the next direction
+        pacManPosition = nextPosition;
         pacManVelocity = nextDirection.velocity;
         pacManRotation = nextDirection.rotation;
-        rotatePacMan(nextDirection.rotation);
-        nextDirection = null; // Clear queued direction
+        pacMan.style.transform = `translate(${pacManPosition.x}px, ${pacManPosition.y}px) rotate(${pacManRotation}deg)`;
+
+        // Check collectibles
+        const pacManRect = pacMan.getBoundingClientRect();
+        checkCollectibles(pacManRect);
+        return;
     }
-    
+
+    // Calculate new position for current direction
+    const currentDirectionPosition = {
+        x: currentPosition.x + pacManVelocity.x,
+        y: currentPosition.y + pacManVelocity.y,
+    };
+
+    // Check if current direction is valid
+    if (!checkCollision(currentDirectionPosition)) {
+        // Keep moving in the current direction
+        pacManPosition = currentDirectionPosition;
+        pacMan.style.transform = `translate(${pacManPosition.x}px, ${pacManPosition.y}px) rotate(${pacManRotation}deg)`;
+
+        // Check collectibles
+        const pacManRect = pacMan.getBoundingClientRect();
+        checkCollectibles(pacManRect);
+    }
 }
+
+
 function checkCollectibles(pacManRect) {
     const powerPellets = document.querySelectorAll(".power-pellet");
     powerPellets.forEach((pellet) => {
@@ -140,21 +155,13 @@ document.addEventListener("keydown", (e) => {
 
 
 function queueDirection(velocity, rotation) {
-    if (isOppositeDirection(velocity, pacManVelocity)) {
-        pacManVelocity = velocity;
-        pacManRotation = rotation;
-        rotatePacMan(rotation);
-    } else {
-        nextDirection = { velocity, rotation };
-    }
+        nextDirection = { velocity, rotation }
 }
 
 function isOppositeDirection(newVelocity, currentVelocity) {
     return (
         newVelocity.x === -currentVelocity.x ||
-        newVelocity.y === -currentVelocity.y ||
-        newVelocity.x === -currentVelocity.x ||
-        newVelocity.y === -currentVelocity.y
+        newVelocity.y === -currentVelocity.y 
     );
 }
 
