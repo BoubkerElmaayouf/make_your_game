@@ -2,17 +2,18 @@ import {
     scoreDisplay,
     lifesDisplay,
 } from './start_game.js'
+
 let pacManRotation = 0;
 let pacManPosition = { x: 0, y: 0 };
 let pacManVelocity = { x: 0, y: 0 };
 let score = 0;
-let currentDirection = null; // Track current direction
+// let currentDirection = null; // Track current direction
 let nextDirection = {velocity : { x :0 , y : 0 } , rotation : 0}; // Track queued direction
 
 export function movePacMan() {
     const walls = document.querySelectorAll(".wall");
     const pacMan = document.querySelector(".pac-man");
-    const ghostLair = document.querySelector(".ghost-lair");
+    const ghostLairs = document.querySelectorAll(".ghost-lair");
 
     // Store current position
     let currentPosition = { x: pacManPosition.x, y: pacManPosition.y };
@@ -27,7 +28,7 @@ export function movePacMan() {
         pacMan.style.transform = `translate(${currentPosition.x}px, ${currentPosition.y}px) rotate(${pacManRotation}deg)`;
 
         // Check ghost lair collision
-        if (ghostLair) {
+        for (const ghostLair of ghostLairs) {
             const ghostLairRect = ghostLair.getBoundingClientRect();
             if (
                 pacManRect.left < ghostLairRect.right &&
@@ -157,20 +158,6 @@ document.addEventListener("keydown", (e) => {
 function queueDirection(velocity, rotation) {
         nextDirection = { velocity, rotation }
 }
-
-function isOppositeDirection(newVelocity, currentVelocity) {
-    return (
-        newVelocity.x === -currentVelocity.x ||
-        newVelocity.y === -currentVelocity.y 
-    );
-}
-
-function rotatePacMan(degrees) {
-    const pacMan = document.querySelector(".pac-man");
-    pacManRotation = degrees;
-    pacMan.style.transform = `translate(${pacManPosition.x}px, ${pacManPosition.y}px) rotate(${degrees}deg)`;
-}
-
 
 // function stopPacMan() {
 //     pacManVelocity = { x: 0, y: 0 };
