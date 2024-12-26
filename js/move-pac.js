@@ -16,7 +16,7 @@ const pause = document.getElementById("pause")
 pause.addEventListener("click", () => {
     if (!isPaused) {
         pacManVelocity = { x: 0, y: 0 }; // Stop Pac-Man
-        isMoving = false; // Stop movement
+        isMoving = true; // Stop movement
         isPaused = true; // Update state
         pause.textContent = "Continue"; // Update button text
         console.log("Game Paused");
@@ -156,12 +156,11 @@ function checkCollectibles(pacManRect) {
 
 }
 
-let isMoving = false
+let isMoving = true
 
 document.addEventListener("keydown", (e) => {
     switch (e.key) {
         case "ArrowUp":
-
             queueDirection({ x: 0, y: -5 }, -90);
             break;
         case "ArrowDown":
@@ -173,10 +172,6 @@ document.addEventListener("keydown", (e) => {
         case "ArrowRight":
             queueDirection({ x: 5, y: 0 }, 0);
             break;
-        // case " ":
-        //     pacManPosition = { x: 0, y: 0 };
-        //     isMoving = false;
-        //     break;
     }
 });
 
@@ -186,12 +181,3 @@ function queueDirection(velocity, rotation) {
 }
 
 
-
-
-
-// function stopPacMan() {
-//     pacManVelocity = { x: 0, y: 0 };
-//     isMoving = false;
-// }
-
-// startGame();
