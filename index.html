@@ -4,9 +4,14 @@
     <meta charset="utf-8">
     <title>Pac-man</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="./img/favicon-32x32.png" type="image/x-icon">
   </head>
   <body>
-    <button id="start-button">Start</button>
+    <div class="btn">
+      <button class="buttons" id="start-button">Start</button>
+      <button class="buttons" id="pause">Pause</button>
+    </div>
+
     <div class="hero">
       <audio src="./songs/Intro.mp3" id="audio"></audio>
       <audio id="eat-dots" src="./songs/Chomp.mp3"></audio>
@@ -17,7 +22,7 @@
       </div>
       <div class="info">
         <h3>Score:<span id="score"></span></h3>
-        <h3>lifes: <span id="lifes"></span></h3>
+        <h3>lifes: <span id="lifes">❤️</span></h3>
         <h3>Time: <span id="Time"></span></h3>
       </div>
     </div>

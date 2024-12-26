@@ -10,7 +10,29 @@ let score = 0;
 // let currentDirection = null; // Track current direction
 let nextDirection = {velocity : { x :0 , y : 0 } , rotation : 0}; // Track queued direction
 
+let isPaused = false; // Updated variable naming for consistency
+const pause = document.getElementById("pause")
+
+pause.addEventListener("click", () => {
+    if (!isPaused) {
+        pacManVelocity = { x: 0, y: 0 }; // Stop Pac-Man
+        isMoving = false; // Stop movement
+        isPaused = true; // Update state
+        pause.textContent = "Continue"; // Update button text
+        console.log("Game Paused");
+    } else {
+        isMoving = true; // Allow movement again
+        isPaused = false; // Update state
+        pause.textContent = "Pause"; // Update button text
+        console.log("Game Resumed");
+    }
+});
+
 export function movePacMan() {
+    if (isPaused || !isMoving) {
+        return; // Stop movement if the game is paused or not moving
+    }
+
     const walls = document.querySelectorAll(".wall");
     const pacMan = document.querySelector(".pac-man");
     const ghostLairs = document.querySelectorAll(".ghost-lair");
@@ -94,7 +116,6 @@ export function movePacMan() {
     }
 }
 
-
 function checkCollectibles(pacManRect) {
     const powerPellets = document.querySelectorAll(".power-pellet");
     powerPellets.forEach((pellet) => {
@@ -131,11 +152,16 @@ function checkCollectibles(pacManRect) {
             scoreDisplay.textContent = score;
         }
     });
+    // let pacManVelocity = 5  
+
 }
+
+let isMoving = false
 
 document.addEventListener("keydown", (e) => {
     switch (e.key) {
         case "ArrowUp":
+
             queueDirection({ x: 0, y: -5 }, -90);
             break;
         case "ArrowDown":
@@ -147,10 +173,10 @@ document.addEventListener("keydown", (e) => {
         case "ArrowRight":
             queueDirection({ x: 5, y: 0 }, 0);
             break;
-        case " ":
-            pacManVelocity = { x: 0, y: 0 };
-            isMoving = false;
-            break;
+        // case " ":
+        //     pacManPosition = { x: 0, y: 0 };
+        //     isMoving = false;
+        //     break;
     }
 });
 
@@ -158,6 +184,10 @@ document.addEventListener("keydown", (e) => {
 function queueDirection(velocity, rotation) {
         nextDirection = { velocity, rotation }
 }
+
+
+
+
 
 // function stopPacMan() {
 //     pacManVelocity = { x: 0, y: 0 };

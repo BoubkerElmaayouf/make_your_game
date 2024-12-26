@@ -148,7 +148,7 @@ h3 {
     background-color: black;
     /* animation: flash 0.4s infinite; */
 }
-#start-button {
+.buttons {
     padding: 10px;
     background-color: transparent;
     color: #2121FF;
@@ -159,7 +159,7 @@ h3 {
     margin-bottom: 20px;
     transition: all 0.3s ease-in-out;
 }
-#start-button:hover {
+.buttons:hover {
     background-color: #2121FF;
     color: #FFFFFF;
 }
@@ -205,6 +205,12 @@ h3 {
     display: block;
     margin-bottom: 10px;
     animation: blink 1s infinite;
+}
+.btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
 }
 
 /* Responsive design */
