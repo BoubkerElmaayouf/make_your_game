@@ -213,7 +213,7 @@ h3 {
     gap: 15px;
 }
 
-Responsive design
+/* Responsive design */
 @media (max-width: 600px) {
     .grid {
         width: 280px;
