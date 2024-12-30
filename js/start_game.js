@@ -1,11 +1,18 @@
 // import {ghostMove} from './script.js'
 import { createGrid} from "./create_grid.js";
-import { movePacMan } from "./move-pac.js";
+import {
+     movePacMan,
+    ghost_dead,
+ } from "./move-pac.js";
 
 let startTime = Date.now();
 export const scoreDisplay = document.getElementById("score");
 export const lifesDisplay = document.getElementById("lifes");
 export const  timeDisplay = document.getElementById("Time");
+export let pinky_y_x = { x: 0, y: 0 };
+export let inky_y_x = { x: 0, y: 0 };
+export let  blinky_y_x = { x: 0, y: 0 };
+export let  clyde_y_x = { x: 0, y: 0 };
 let lifes = 3;
 let lastFrameTime = 0;
 let animationId;
@@ -14,13 +21,19 @@ const speed = 50; // Movement speed in pixels per frame
 let speedghost = 1;
 let score = 0;
 
+export function resite() {
+    blinky_y_x = { x: 0, y: 0 };
+    inky_y_x = { x: 0, y: 0 };
+    pinky_y_x = { x: 0, y: 0 };
+    clyde_y_x = { x: 0, y: 0 };
+}
+
 function gameLoop(timestamp) {
     const deltaTime = timestamp - lastFrameTime;
 
     if (deltaTime >= speed) {
         movePacMan();
         updateTime();
-        //GameOver()
         lastFrameTime = timestamp;
     }
  
@@ -82,17 +95,31 @@ function NextMoveGost(move) {
      }
      return false;
  }
+function GhostDead(ghost) {
+    const pacMan = document.querySelector('.pac-man');
+    
+    const ghostRect = ghost.getBoundingClientRect();
+    const pacManRect = pacMan.getBoundingClientRect();
+            if (
+                pacManRect.left < ghostRect.right &&
+                pacManRect.right > ghostRect.left &&
+                pacManRect.top < ghostRect.bottom &&
+                pacManRect.bottom > ghostRect.top
+            ) {
+                console.log("Game Over");
+                return true;
+            }
+        
+        return false;
+    }
 
  function movegostpinky() {
      const pinky = document.querySelector('.pinky');
-     let x = 0;
-     let y = 0;
-
- 
+    
      let move = NextMoveGost();
      function updatePosition() {
-         let newX = x;
-         let newY = y;
+         let newX = pinky_y_x.x;
+         let newY = pinky_y_x.y;
  if (newX == 55  && newY == 0) {
      newY -= speedghost
  }else if (move === 'left') {
@@ -106,13 +133,17 @@ function NextMoveGost(move) {
          }
  
          if (!checkCollision(newX, newY,pinky)) {
-             x = newX;
-             y = newY;
+            pinky_y_x.x = newX;
+            pinky_y_x.y = newY;
+        } else if (GhostDead(pinky) && ghost_dead) {
+           pinky.style.transform = `translate(0px, 0px)`;
+            pinky.classList.remove("ghost_dead");
+            pinky_y_x = { x: 0, y: 0 };
          } else {
              move = NextMoveGost(move);
          }
  
-         pinky.style.transform = `translate(${x}px, ${y}px)`;
+         pinky.style.transform = `translate(${pinky_y_x.x}px, ${ pinky_y_x.y}px)`;
  
          requestAnimationFrame(updatePosition);
      }
@@ -121,13 +152,11 @@ function NextMoveGost(move) {
  }
  function movegostblinky() {
      const blinky = document.querySelector('.blinky');
-     let x = 0;
-     let y = 0;
  
      let move = NextMoveGost();
      function updatePosition() {
-         let newX = x;
-         let newY = y;
+         let newX = blinky_y_x.x;
+         let newY = blinky_y_x.y;
  
          if (newX == -59 && newY == 0) {
              newY -= speedghost
@@ -142,13 +171,17 @@ function NextMoveGost(move) {
          }
  
          if (!checkCollision(newX, newY,blinky)) {
-             x = newX;
-             y = newY;
+            blinky_y_x.x = newX;
+            blinky_y_x.y = newY;
+         } else if (GhostDead(blinky) && ghost_dead) {
+            pinky.style.transform = `translate(0px, 0px)`;
+            blinky.classList.remove("ghost_dead");
+            blinky_y_x = { x: 0, y: 0 };
          } else {
              move = NextMoveGost(move);
          }
  
-         blinky.style.transform = `translate(${x}px, ${y}px)`;
+         blinky.style.transform = `translate(${blinky_y_x.x}px, ${blinky_y_x.y}px)`;
  
          requestAnimationFrame(updatePosition);
      }
@@ -157,13 +190,12 @@ function NextMoveGost(move) {
  }
  function movegostinky() {
      const inky = document.querySelector('.inky');
-     let x = 0;
-     let y = 0;
+     
  
      let move = NextMoveGost();
      function updatePosition() {
-         let newX = x;
-         let newY = y;
+         let newX = inky_y_x.x;
+         let newY = inky_y_x.y;
  
          if (newX == -55  && newY == -40) {
              newY -= speedghost
@@ -178,13 +210,17 @@ function NextMoveGost(move) {
          }
  
          if (!checkCollision(newX, newY,inky)) {
-             x = newX;
-             y = newY;
+            inky_y_x.x = newX;
+            inky_y_x.y = newY;
+        } else if (GhostDead(inky) && ghost_dead) {
+            console.log("Game Over inky");
+            inky.classList.remove("ghost_dead");
+            inky_y_x = { x: 0, y: 0 };
          } else {
              move = NextMoveGost(move);
          }
  
-         inky.style.transform = `translate(${x}px, ${y}px)`;
+         inky.style.transform = `translate(${inky_y_x.x}px, ${inky_y_x.y}px)`;
  
          requestAnimationFrame(updatePosition);
      }
@@ -193,13 +229,11 @@ function NextMoveGost(move) {
  }
  function movegostclyde() {
      const clyde = document.querySelector('.clyde');
-     let x = 0;
-     let y = 0;
  
      let move = NextMoveGost();
      function updatePosition() {
-         let newX = x;
-         let newY = y;
+         let newX = clyde_y_x.x;
+         let newY = clyde_y_x.y;
  
          if (newX == 58  && (newY == -20 || newY == 20)) {
              newY -= speedghost
@@ -214,13 +248,17 @@ function NextMoveGost(move) {
          }
  
          if (!checkCollision(newX, newY,clyde)) {
-             x = newX;
-             y = newY;
+            clyde_y_x.x = newX;
+            clyde_y_x.y = newY;
+        } else if (GhostDead(clyde) && ghost_dead) {
+            console.log("Game Over clyde");
+            clyde.classList.remove("ghost_dead");
+            clyde_y_x = { x: 0, y: 0 };
          } else {
              move = NextMoveGost(move);
          }
  
-         clyde.style.transform = `translate(${x}px, ${y}px)`;
+         clyde.style.transform = `translate(${clyde_y_x.x}px, ${clyde_y_x.y}px)`;
  
          requestAnimationFrame(updatePosition);
      }

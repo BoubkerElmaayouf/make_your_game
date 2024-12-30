@@ -1,13 +1,14 @@
 import {
     scoreDisplay,
     lifesDisplay,
+    resite
 } from './start_game.js'
 
 let pacManRotation = 0;
 let pacManPosition = { x: 0, y: 0 };
 let pacManVelocity = { x: 0, y: 0 };
 let score = 0;
-let ghost_dead = false;
+export let ghost_dead = false;
 // let currentDirection = null; // Track current direction
 let nextDirection = {velocity : { x :0 , y : 0 } , rotation : 0}; // Track queued direction
 
@@ -120,6 +121,10 @@ export function movePacMan() {
         pacMan.style.transform = `translate(0px, 0px) rotate(0deg)`;
         pacManPosition = { x: 0, y: 0 };
         pacManVelocity = { x: 0, y: 0 };
+        ghosts.forEach((ghost) => {
+            ghost.style.transform = `translate(0px, 0px)`;
+        })
+        resite()
         pacManRotation = 0;
         lifesDisplay.textContent -= 1;
         if (lifesDisplay.textContent == 0) {
@@ -135,7 +140,10 @@ export function movePacMan() {
         }
         return;
     }
-
+    if (GameOver() && ghost_dead) {
+      
+        return;
+    }
     // Calculate new position for current direction
     const currentDirectionPosition = {
         x: currentPosition.x + pacManVelocity.x,
