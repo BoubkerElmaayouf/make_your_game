@@ -32,15 +32,34 @@ export function movePacMan() {
     if (isPaused || !isMoving) {
         return; // Stop movement if the game is paused or not moving
     }
-
+  
     const walls = document.querySelectorAll(".wall");
     const pacMan = document.querySelector(".pac-man");
     const ghostLairs = document.querySelectorAll(".ghost-lair");
+    const ghosts = document.querySelectorAll(".ghost");
 
     // Store current position
     let currentPosition = { x: pacManPosition.x, y: pacManPosition.y };
 
     // Helper function to check collisions
+    function GameOver() {
+    
+        for (const ghost of ghosts) {       
+            const ghostRect = ghost.getBoundingClientRect();
+            const pacManRect = pacMan.getBoundingClientRect();
+            if (
+                pacManRect.left < ghostRect.right &&
+                pacManRect.right > ghostRect.left &&
+                pacManRect.top < ghostRect.bottom &&
+                pacManRect.bottom > ghostRect.top
+            ) {
+                console.log("Game Over");
+                return true;
+            }
+        }
+        return false;
+    }
+        // Temporarily move
     function checkCollision(position) {
         // Temporarily move Pac-Man to test collision
         pacMan.style.transform = `translate(${position.x}px, ${position.y}px) rotate(${pacManRotation}deg)`;
@@ -95,6 +114,17 @@ export function movePacMan() {
         // Check collectibles
         const pacManRect = pacMan.getBoundingClientRect();
         checkCollectibles(pacManRect);
+        return;
+    }
+    if (GameOver()) {
+        pacMan.style.transform = `translate(0px, 0px) rotate(0deg)`;
+        pacManPosition = { x: 0, y: 0 };
+        pacManVelocity = { x: 0, y: 0 };
+        pacManRotation = 0;
+        lifesDisplay.textContent -= 1;
+        if (lifesDisplay.textContent == 0) {
+            cancelAnimationFrame(animationId);
+        }
         return;
     }
 
@@ -155,7 +185,7 @@ function checkCollectibles(pacManRect) {
     // let pacManVelocity = 5  
 
 }
-
+ 
 let isMoving = false
 
 document.addEventListener("keydown", (e) => {

@@ -11,7 +11,7 @@ let lastFrameTime = 0;
 let animationId;
 const speed = 50; // Movement speed in pixels per frame
 
-
+let speedghost = 1;
 let score = 0;
 
 function gameLoop(timestamp) {
@@ -20,11 +20,13 @@ function gameLoop(timestamp) {
     if (deltaTime >= speed) {
         movePacMan();
         updateTime();
+        //GameOver()
         lastFrameTime = timestamp;
     }
+ 
 
     animationId = requestAnimationFrame(gameLoop);
-}
+  }
 
 
 export function startGame() {
@@ -49,9 +51,22 @@ function updateTime() {
     timeDisplay.textContent = elapsedTime;
 }
    
-function NextMoveGost() {
-    const move = ['left', 'right','up','down']
-     return move[Math.floor(move.length * Math.random())]
+function NextMoveGost(move) {
+    if (move === 'left' || move === 'right') {
+        console.log("left or right")
+        const moves = ['up','down']
+        return moves[Math.floor(moves.length * Math.random())]  
+    }else if (move === 'up' || move === 'down') {
+        console.log("up or down")
+        const moves1 = ['left', 'right']
+        return moves1[Math.floor(moves1.length * Math.random())]
+    }else{
+ 
+        console.log("else")
+        const moves2 = ['left', 'right', 'up', 'down']
+        return moves2[Math.floor(moves2.length * Math.random())]
+    }
+    
  }
  function checkCollision(X, Y,ghost) {
      const walls = document.querySelectorAll('.wall');
@@ -71,33 +86,34 @@ function NextMoveGost() {
      }
      return false;
  }
+
  function movegostpinky() {
      const pinky = document.querySelector('.pinky');
-     let speed = 1;
      let x = 0;
      let y = 0;
+
  
      let move = NextMoveGost();
      function updatePosition() {
          let newX = x;
          let newY = y;
  if (newX == 55  && newY == 0) {
-     newY -= speed
+     newY -= speedghost
  }else if (move === 'left') {
-             newX -= speed;
+             newX -= speedghost;
          } else if (move === 'right') {
-             newX += speed;
+             newX += speedghost;
          } else if (move === 'up') {
-             newY -= speed;
+             newY -= speedghost;
          } else if (move === 'down') {
-             newY += speed;
+             newY += speedghost;
          }
  
          if (!checkCollision(newX, newY,pinky)) {
              x = newX;
              y = newY;
          } else {
-             move = NextMoveGost();
+             move = NextMoveGost(move);
          }
  
          pinky.style.transform = `translate(${x}px, ${y}px)`;
@@ -109,7 +125,6 @@ function NextMoveGost() {
  }
  function movegostblinky() {
      const blinky = document.querySelector('.blinky');
-     let speed = 1;
      let x = 0;
      let y = 0;
  
@@ -119,22 +134,22 @@ function NextMoveGost() {
          let newY = y;
  
          if (newX == -59 && newY == 0) {
-             newY -= speed
+             newY -= speedghost
          }else if (move === 'left') {
-             newX -= speed;
+             newX -= speedghost;
          } else if (move === 'right') {
-             newX += speed;
+             newX += speedghost;
          } else if (move === 'up') {
-             newY -= speed;
+             newY -= speedghost;
          } else if (move === 'down') {
-             newY += speed;
+             newY += speedghost;
          }
  
          if (!checkCollision(newX, newY,blinky)) {
              x = newX;
              y = newY;
          } else {
-             move = NextMoveGost();
+             move = NextMoveGost(move);
          }
  
          blinky.style.transform = `translate(${x}px, ${y}px)`;
@@ -146,7 +161,6 @@ function NextMoveGost() {
  }
  function movegostinky() {
      const inky = document.querySelector('.inky');
-     let speed = 1;
      let x = 0;
      let y = 0;
  
@@ -156,22 +170,22 @@ function NextMoveGost() {
          let newY = y;
  
          if (newX == -55  && newY == -40) {
-             newY -= speed
+             newY -= speedghost
          }else  if (move === 'left') {
-             newX -= speed;
+             newX -= speedghost;
          } else if (move === 'right') {
-             newX += speed;
+             newX += speedghost;
          } else if (move === 'up') {
-             newY -= speed;
+             newY -= speedghost;
          } else if (move === 'down') {
-             newY += speed;
+             newY += speedghost;
          }
  
          if (!checkCollision(newX, newY,inky)) {
              x = newX;
              y = newY;
          } else {
-             move = NextMoveGost();
+             move = NextMoveGost(move);
          }
  
          inky.style.transform = `translate(${x}px, ${y}px)`;
@@ -183,7 +197,6 @@ function NextMoveGost() {
  }
  function movegostclyde() {
      const clyde = document.querySelector('.clyde');
-     let speed = 1;
      let x = 0;
      let y = 0;
  
@@ -192,23 +205,23 @@ function NextMoveGost() {
          let newX = x;
          let newY = y;
  
-         if (newX == 55  && (newY == -40 || newY == 0)) {
-             newY -= speed
+         if (newX == 58  && (newY == -40 || newY == 0)) {
+             newY -= speedghost
          }else if (move === 'left') {
-             newX -= speed;
+             newX -= speedghost;
          } else if (move === 'right') {
-             newX += speed;
+             newX += speedghost;
          } else if (move === 'up') {
-             newY -= speed;
+             newY -= speedghost;
          } else if (move === 'down') {
-             newY += speed;
+             newY += speedghost;
          }
  
          if (!checkCollision(newX, newY,clyde)) {
              x = newX;
              y = newY;
          } else {
-             move = NextMoveGost();
+             move = NextMoveGost(move);
          }
  
          clyde.style.transform = `translate(${x}px, ${y}px)`;

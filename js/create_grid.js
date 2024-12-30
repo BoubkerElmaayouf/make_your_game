@@ -50,12 +50,12 @@ export function createGrid() {
             case 2:
                 square.classList.add("ghost-lair");
                 // square.textContent = index
-                if (index === 347 || index === 352 || index === 408 || index === 403) {
+                if (index === 347 || index === 352 || index === 408 || index === 375) {
                     square.classList.add("ghost");
                     if (index === 347) square.classList.add("pinky");
                     if (index === 352) square.classList.add("blinky");
                     if (index === 408) square.classList.add("inky");
-                    if (index === 403) square.classList.add("clyde");
+                    if (index === 375) square.classList.add("clyde");
                 }
                 break;
             case 3:
