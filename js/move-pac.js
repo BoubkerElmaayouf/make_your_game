@@ -7,6 +7,7 @@ let pacManRotation = 0;
 let pacManPosition = { x: 0, y: 0 };
 let pacManVelocity = { x: 0, y: 0 };
 let score = 0;
+let ghost_dead = false;
 // let currentDirection = null; // Track current direction
 let nextDirection = {velocity : { x :0 , y : 0 } , rotation : 0}; // Track queued direction
 
@@ -43,7 +44,6 @@ export function movePacMan() {
 
     // Helper function to check collisions
     function GameOver() {
-    
         for (const ghost of ghosts) {       
             const ghostRect = ghost.getBoundingClientRect();
             const pacManRect = pacMan.getBoundingClientRect();
@@ -116,14 +116,22 @@ export function movePacMan() {
         checkCollectibles(pacManRect);
         return;
     }
-    if (GameOver()) {
+    if (GameOver()&& !ghost_dead) {
         pacMan.style.transform = `translate(0px, 0px) rotate(0deg)`;
         pacManPosition = { x: 0, y: 0 };
         pacManVelocity = { x: 0, y: 0 };
         pacManRotation = 0;
         lifesDisplay.textContent -= 1;
         if (lifesDisplay.textContent == 0) {
-            cancelAnimationFrame(animationId);
+            const gameOver = document.querySelectorAll(".grid > div");
+            gameOver.forEach((cell) => {
+                cell.remove();
+            })
+            const gameOvermessage = document.querySelector(".grid");
+            let message = document.createElement("h1");
+            message.classList.add("game-over");
+            message.textContent = "Game Over";
+            gameOvermessage.appendChild(message);
         }
         return;
     }
@@ -156,6 +164,18 @@ function checkCollectibles(pacManRect) {
             pacManRect.top < pelletRect.bottom &&
             pacManRect.bottom > pelletRect.top
         ) {
+            const ghosts  = document.querySelectorAll(".ghost");
+            ghost_dead = true;
+            setTimeout(() => {
+                ghosts.forEach((ghost) => {
+                    ghost.classList.remove("ghost_dead");
+                })
+                ghost_dead = false;
+            }, 5000);
+            ghosts.forEach((ghost) => {
+                ghost.classList.add("ghost_dead");
+
+            })
             // Collect power-pellet
             pellet.classList.remove("power-pellet");
             const prize  = document.getElementById("prize");
