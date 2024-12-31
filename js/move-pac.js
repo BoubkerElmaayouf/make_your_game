@@ -1,6 +1,7 @@
 import {
     scoreDisplay,
     lifesDisplay,
+    startGame,
 } from './start_game.js'
 
 let pacManRotation = 0;
@@ -53,7 +54,7 @@ export function movePacMan() {
                 pacManRect.top < ghostRect.bottom &&
                 pacManRect.bottom > ghostRect.top
             ) {
-                console.log("Game Over");
+                console.log("Ghost qisa");
                 return true;
             }
         }
@@ -117,11 +118,20 @@ export function movePacMan() {
         return;
     }
     if (GameOver()) {
+        lifesDisplay.textContent = Number(lifesDisplay.textContent) - 1;
+        if (lifesDisplay.textContent == 0) {
+            cancelAnimationFrame(animationId);
+            console.log("game over");
+            
+        }
+        startGame(scoreDisplay.textContent, lifesDisplay.textContent)
+        
+
         pacMan.style.transform = `translate(0px, 0px) rotate(0deg)`;
         pacManPosition = { x: 0, y: 0 };
+
         pacManVelocity = { x: 0, y: 0 };
         pacManRotation = 0;
-        lifesDisplay.textContent -= 1;
         if (lifesDisplay.textContent == 0) {
             cancelAnimationFrame(animationId);
         }

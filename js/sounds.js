@@ -24,10 +24,10 @@ export function sounds(){
                 pattern.style.display = "none";
                 audio.play();
                 isGameStarted = true;
-                startButton.textContent = "Restart";
+                startButton.textContent = "Home";
                 // audio.pause();
                 createGrid();
-                startGame();
+                startGame(0,3);
             } else {
                 document.location.reload();
             }

@@ -29,7 +29,7 @@ function gameLoop(timestamp) {
   }
 
 
-export function startGame() {
+export function startGame(score , lifes) {
        scoreDisplay.textContent = score;
        lifesDisplay.textContent = lifes;
        timeDisplay.textContent = 0;
@@ -53,16 +53,12 @@ function updateTime() {
    
 function NextMoveGost(move) {
     if (move === 'left' || move === 'right') {
-        console.log("left or right")
         const moves = ['up','down']
         return moves[Math.floor(moves.length * Math.random())]  
     }else if (move === 'up' || move === 'down') {
-        console.log("up or down")
         const moves1 = ['left', 'right']
         return moves1[Math.floor(moves1.length * Math.random())]
     }else{
- 
-        console.log("else")
         const moves2 = ['left', 'right', 'up', 'down']
         return moves2[Math.floor(moves2.length * Math.random())]
     }
