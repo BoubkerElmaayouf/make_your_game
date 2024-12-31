@@ -140,10 +140,7 @@ export function movePacMan() {
         }
         return;
     }
-    if (GameOver() && ghost_dead) {
-      
-        return;
-    }
+   
     // Calculate new position for current direction
     const currentDirectionPosition = {
         x: currentPosition.x + pacManVelocity.x,
@@ -163,6 +160,7 @@ export function movePacMan() {
 }
 
 function checkCollectibles(pacManRect) {
+    let r
     const powerPellets = document.querySelectorAll(".power-pellet");
     powerPellets.forEach((pellet) => {
         const pelletRect = pellet.getBoundingClientRect();
@@ -172,14 +170,14 @@ function checkCollectibles(pacManRect) {
             pacManRect.top < pelletRect.bottom &&
             pacManRect.bottom > pelletRect.top
         ) {
-            const ghosts  = document.querySelectorAll(".ghost");
             ghost_dead = true;
-            setTimeout(() => {
+            const ghosts  = document.querySelectorAll(".ghost");
+          r =  setTimeout(() => {
                 ghosts.forEach((ghost) => {
                     ghost.classList.remove("ghost_dead");
                 })
                 ghost_dead = false;
-            }, 5000);
+            }, 10000);
             ghosts.forEach((ghost) => {
                 ghost.classList.add("ghost_dead");
 

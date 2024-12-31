@@ -106,7 +106,6 @@ function GhostDead(ghost) {
                 pacManRect.top < ghostRect.bottom &&
                 pacManRect.bottom > ghostRect.top
             ) {
-                console.log("Game Over");
                 return true;
             }
         
@@ -131,18 +130,20 @@ function GhostDead(ghost) {
          } else if (move === 'down') {
              newY += speedghost;
          }
+       
  
          if (!checkCollision(newX, newY,pinky)) {
             pinky_y_x.x = newX;
             pinky_y_x.y = newY;
-        } else if (GhostDead(pinky) && ghost_dead) {
-           pinky.style.transform = `translate(0px, 0px)`;
-            pinky.classList.remove("ghost_dead");
-            pinky_y_x = { x: 0, y: 0 };
-         } else {
+        } else {
              move = NextMoveGost(move);
          }
- 
+         if (GhostDead(pinky) && ghost_dead) {
+            pinky.style.transform = `translate(0px, 0px)`;
+            pinky.classList.remove("ghost_dead");
+            pinky_y_x.x = 0;
+            pinky_y_x.y = 0;
+         }
          pinky.style.transform = `translate(${pinky_y_x.x}px, ${ pinky_y_x.y}px)`;
  
          requestAnimationFrame(updatePosition);
@@ -173,13 +174,16 @@ function GhostDead(ghost) {
          if (!checkCollision(newX, newY,blinky)) {
             blinky_y_x.x = newX;
             blinky_y_x.y = newY;
-         } else if (GhostDead(blinky) && ghost_dead) {
-            pinky.style.transform = `translate(0px, 0px)`;
-            blinky.classList.remove("ghost_dead");
-            blinky_y_x = { x: 0, y: 0 };
-         } else {
+         }  else {
              move = NextMoveGost(move);
          }
+         if (GhostDead(blinky) && ghost_dead) {
+            blinky.style.transform = `translate(0px, 0px)`;
+            blinky.classList.remove("ghost_dead");
+            blinky_y_x.x = 0;
+            blinky_y_x.y = 0;
+            console.log("Game Over blinky");
+                 }
  
          blinky.style.transform = `translate(${blinky_y_x.x}px, ${blinky_y_x.y}px)`;
  
@@ -212,14 +216,16 @@ function GhostDead(ghost) {
          if (!checkCollision(newX, newY,inky)) {
             inky_y_x.x = newX;
             inky_y_x.y = newY;
-        } else if (GhostDead(inky) && ghost_dead) {
-            console.log("Game Over inky");
-            inky.classList.remove("ghost_dead");
-            inky_y_x = { x: 0, y: 0 };
-         } else {
+        }  else {
              move = NextMoveGost(move);
          }
- 
+         if (GhostDead(inky) && ghost_dead) {
+            inky.style.transform = `translate(0px, 0px)`;
+            console.log("Game Over inky");
+            inky.classList.remove("ghost_dead");
+           inky_y_x.x = 0;  
+              inky_y_x.y = 0;
+         }
          inky.style.transform = `translate(${inky_y_x.x}px, ${inky_y_x.y}px)`;
  
          requestAnimationFrame(updatePosition);
@@ -250,12 +256,15 @@ function GhostDead(ghost) {
          if (!checkCollision(newX, newY,clyde)) {
             clyde_y_x.x = newX;
             clyde_y_x.y = newY;
-        } else if (GhostDead(clyde) && ghost_dead) {
+        } else {
+             move = NextMoveGost(move);
+         }
+         if (GhostDead(clyde) && ghost_dead) {
+            clyde.style.transform = `translate(0px, 0px)`;
             console.log("Game Over clyde");
             clyde.classList.remove("ghost_dead");
-            clyde_y_x = { x: 0, y: 0 };
-         } else {
-             move = NextMoveGost(move);
+            clyde_y_x.x = 0;
+            clyde_y_x.y = 0;
          }
  
          clyde.style.transform = `translate(${clyde_y_x.x}px, ${clyde_y_x.y}px)`;
