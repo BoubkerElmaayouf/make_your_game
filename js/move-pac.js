@@ -211,8 +211,8 @@ function checkCollectibles(pacManRect) {
     // let pacManVelocity = 5  
 
 }
- 
-let isMoving = false
+    
+let isMoving = true
 
 document.addEventListener("keydown", (e) => {
     switch (e.key) {

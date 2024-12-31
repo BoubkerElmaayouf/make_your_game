@@ -12,7 +12,7 @@ export const layout = [
     1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
     1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1,
     1, 1, 1, 1, 1, 1, 0, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1, 1, 0, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 0, 1, 1, 4, 1, 1, 1, 2, 2, 1, 1, 1, 4, 1, 1, 0, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 0, 1, 1, 4, 1, 1, 1, 6, 6, 1, 1, 1, 4, 1, 1, 0, 1, 1, 1, 1, 1, 1,
     1, 1, 1, 1, 1, 1, 0, 1, 1, 4, 1, 2, 2, 2, 2, 2, 2, 1, 4, 1, 1, 0, 1, 1, 1, 1, 1, 1,
     1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 2, 2, 2, 2, 2, 2, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1,
     1, 0, 1, 1, 1, 1, 0, 1, 1, 4, 1, 2, 2, 2, 2, 2, 2, 1, 4, 1, 1, 0, 1, 1, 1, 1, 0, 1,
@@ -40,15 +40,15 @@ export function createGrid() {
         const square = document.createElement("div");
         square.setAttribute("data-index", index);
         square.setAttribute("data-value", cell);
-        switch(cell) {
-            case 0:   
+        switch (cell) {
+            case 0:
                 square.classList.add("pac-dot");
                 break;
             case 1:
                 square.classList.add("wall");
                 break;
             case 2:
-                square.classList.add("ghost-lair");
+                // square.classList.add("ghost-lair");
                 // square.textContent = index
                 if (index === 347 || index === 352 || index === 408 || index === 375) {
                     square.classList.add("ghost");
@@ -64,6 +64,10 @@ export function createGrid() {
             case 5:
                 square.classList.add("pac-man");
                 break;
+            case 6:
+                square.classList.add("ghost-lair");
+                break;
+
             // case 4 is empty, no class needed
         }
         if (index === 489) {
