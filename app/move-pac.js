@@ -1,23 +1,28 @@
 import {
     scoreDisplay,
     lifesDisplay,
-    resite
+    resite,
+    gameLoop,
+    updatePositions
 } from './start_game.js'
+
+import {animationId , animationIdg } from './start_game.js'
 
 let pacManRotation = 0;
 let pacManPosition = { x: 0, y: 0 };
 let pacManVelocity = { x: 0, y: 0 };
 let score = 0;
 export let ghost_dead = false;
-// let currentDirection = null; // Track current direction
-let nextDirection = {velocity : { x :0 , y : 0 } , rotation : 0}; // Track queued direction
+let nextDirection = { velocity: { x: 0, y: 0 }, rotation: 0 }; // Track queued direction
 
 let isPaused = false; // Updated variable naming for consistency
 const pause = document.getElementById("pause")
 
 pause.addEventListener("click", () => {
     if (!isPaused) {
-        pacManVelocity = { x: 0, y: 0 }; // Stop Pac-Man
+        cancelAnimationFrame(animationIdg);
+
+        cancelAnimationFrame(animationId);
         isMoving = false; // Stop movement
         isPaused = true; // Update state
         pause.textContent = "Continue"; // Update button text
@@ -25,7 +30,10 @@ pause.addEventListener("click", () => {
     } else {
         isMoving = true; // Allow movement again
         isPaused = false; // Update state
-        pause.textContent = "Pause"; // Update button text
+        pause.textContent = "Pause";
+        animationId = requestAnimationFrame(updatePositions);  
+
+        animationId = requestAnimationFrame(gameLoop);  
         console.log("Game Resumed");
     }
 });
@@ -34,7 +42,7 @@ export function movePacMan() {
     if (isPaused || !isMoving) {
         return; // Stop movement if the game is paused or not moving
     }
-  
+
     const walls = document.querySelectorAll(".wall");
     const pacMan = document.querySelector(".pac-man");
     const ghostLairs = document.querySelectorAll(".ghost-lair");
@@ -45,7 +53,7 @@ export function movePacMan() {
 
     // Helper function to check collisions
     function GameOver() {
-        for (const ghost of ghosts) {       
+        for (const ghost of ghosts) {
             const ghostRect = ghost.getBoundingClientRect();
             const pacManRect = pacMan.getBoundingClientRect();
             if (
@@ -60,7 +68,7 @@ export function movePacMan() {
         }
         return false;
     }
-        // Temporarily move
+    // Temporarily move
     function checkCollision(position) {
         // Temporarily move Pac-Man to test collision
         pacMan.style.transform = `translate(${position.x}px, ${position.y}px) rotate(${pacManRotation}deg)`;
@@ -115,32 +123,33 @@ export function movePacMan() {
         // Check collectibles
         const pacManRect = pacMan.getBoundingClientRect();
         checkCollectibles(pacManRect);
-        return;
-    }
-    if (GameOver()&& !ghost_dead) {
-        pacMan.style.transform = `translate(0px, 0px) rotate(0deg)`;
-        pacManPosition = { x: 0, y: 0 };
-        pacManVelocity = { x: 0, y: 0 };
-        ghosts.forEach((ghost) => {
-            ghost.style.transform = `translate(0px, 0px)`;
-        })
-        resite()
-        pacManRotation = 0;
-        lifesDisplay.textContent -= 1;
-        if (lifesDisplay.textContent == 0) {
-            const gameOver = document.querySelectorAll(".grid > div");
-            gameOver.forEach((cell) => {
-                cell.remove();
+        if (GameOver() && !ghost_dead) {
+            pacMan.style.transform = `translate(0px, 0px) rotate(0deg)`;
+            pacManPosition = { x: 0, y: 0 };
+            pacManVelocity = { x: 0, y: 0 };
+            ghosts.forEach((ghost) => {
+                ghost.style.transform = `translate(0px, 0px)`;
             })
-            const gameOvermessage = document.querySelector(".grid");
-            let message = document.createElement("h1");
-            message.classList.add("game-over");
-            message.textContent = "Game Over";
-            gameOvermessage.appendChild(message);
+            resite()
+            pacManRotation = 0;
+            lifesDisplay.textContent -= 1;
+            if (lifesDisplay.textContent == 0) {
+                const gameOver = document.querySelectorAll(".grid > div");
+                gameOver.forEach((cell) => {
+                    cell.remove();
+                })
+                const gameOvermessage = document.querySelector(".grid");
+                let message = document.createElement("h1");
+                message.classList.add("game-over");
+                message.textContent = "Game Over";
+                gameOvermessage.appendChild(message);
+            }
+            return;
         }
-        return;
+        return
     }
-   
+    
+
     // Calculate new position for current direction
     const currentDirectionPosition = {
         x: currentPosition.x + pacManVelocity.x,
@@ -156,6 +165,30 @@ export function movePacMan() {
         // Check collectibles
         const pacManRect = pacMan.getBoundingClientRect();
         checkCollectibles(pacManRect);
+        if (GameOver() && !ghost_dead) {
+            pacMan.style.transform = `translate(0px, 0px) rotate(0deg)`;
+            pacManPosition = { x: 0, y: 0 };
+            pacManVelocity = { x: 0, y: 0 };
+            ghosts.forEach((ghost) => {
+                ghost.style.transform = `translate(0px, 0px)`;
+            })
+            resite()
+            pacManRotation = 0;
+            lifesDisplay.textContent -= 1;
+            if (lifesDisplay.textContent == 0) {
+                const gameOver = document.querySelectorAll(".grid > div");
+                gameOver.forEach((cell) => {
+                    cell.remove();
+                })
+                const gameOvermessage = document.querySelector(".grid");
+                let message = document.createElement("h1");
+                message.classList.add("game-over");
+                message.textContent = "Game Over";
+                gameOvermessage.appendChild(message);
+            }
+            return;
+        }
+        return 
     }
 }
 
@@ -171,8 +204,8 @@ function checkCollectibles(pacManRect) {
             pacManRect.bottom > pelletRect.top
         ) {
             ghost_dead = true;
-            const ghosts  = document.querySelectorAll(".ghost");
-          r =  setTimeout(() => {
+            const ghosts = document.querySelectorAll(".ghost");
+            r = setTimeout(() => {
                 ghosts.forEach((ghost) => {
                     ghost.classList.remove("ghost_dead");
                 })
@@ -184,13 +217,13 @@ function checkCollectibles(pacManRect) {
             })
             // Collect power-pellet
             pellet.classList.remove("power-pellet");
-            const prize  = document.getElementById("prize");
+            const prize = document.getElementById("prize");
             prize.play();
             score += 50;
             scoreDisplay.textContent = score;
         }
     });
-    
+
     const pacDots = document.querySelectorAll(".pac-dot");
     pacDots.forEach((dot) => {
         const dotRect = dot.getBoundingClientRect();
@@ -202,7 +235,7 @@ function checkCollectibles(pacManRect) {
         ) {
             // Collect pac-dot
             dot.classList.remove("pac-dot");
-            const eat_dots  = document.getElementById("eat-dots");
+            const eat_dots = document.getElementById("eat-dots");
             eat_dots.play();
             score += 10;
             scoreDisplay.textContent = score;
@@ -211,7 +244,7 @@ function checkCollectibles(pacManRect) {
     // let pacManVelocity = 5  
 
 }
-    
+
 let isMoving = true
 
 document.addEventListener("keydown", (e) => {
@@ -229,25 +262,12 @@ document.addEventListener("keydown", (e) => {
         case "ArrowRight":
             queueDirection({ x: 5, y: 0 }, 0);
             break;
-        // case " ":
-        //     pacManPosition = { x: 0, y: 0 };
-        //     isMoving = false;
-        //     break;
+
     }
 });
 
 
 function queueDirection(velocity, rotation) {
-        nextDirection = { velocity, rotation }
+    nextDirection = { velocity, rotation }
 }
 
-
-
-
-
-// function stopPacMan() {
-//     pacManVelocity = { x: 0, y: 0 };
-//     isMoving = false;
-// }
-
-// startGame();
