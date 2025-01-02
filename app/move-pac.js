@@ -31,7 +31,7 @@ pause.addEventListener("click", () => {
         isMoving = true; // Allow movement again
         isPaused = false; // Update state
         pause.textContent = "Pause";
-        animationId = requestAnimationFrame(updatePositions);  
+        animationIdg = requestAnimationFrame(updatePositions);  
 
         animationId = requestAnimationFrame(gameLoop);  
         console.log("Game Resumed");
@@ -39,18 +39,19 @@ pause.addEventListener("click", () => {
 });
 
 export function movePacMan() {
+    
     if (isPaused || !isMoving) {
         return; // Stop movement if the game is paused or not moving
     }
-
+    
     const walls = document.querySelectorAll(".wall");
     const pacMan = document.querySelector(".pac-man");
     const ghostLairs = document.querySelectorAll(".ghost-lair");
     const ghosts = document.querySelectorAll(".ghost");
-
+    
     // Store current position
     let currentPosition = { x: pacManPosition.x, y: pacManPosition.y };
-
+    
     // Helper function to check collisions
     function GameOver() {
         for (const ghost of ghosts) {
@@ -73,10 +74,10 @@ export function movePacMan() {
         // Temporarily move Pac-Man to test collision
         pacMan.style.transform = `translate(${position.x}px, ${position.y}px) rotate(${pacManRotation}deg)`;
         const pacManRect = pacMan.getBoundingClientRect();
-
+        
         // Reset position
         pacMan.style.transform = `translate(${currentPosition.x}px, ${currentPosition.y}px) rotate(${pacManRotation}deg)`;
-
+        
         // Check ghost lair collision
         for (const ghostLair of ghostLairs) {
             const ghostLairRect = ghostLair.getBoundingClientRect();
@@ -89,7 +90,7 @@ export function movePacMan() {
                 return true;
             }
         }
-
+        
         // Check wall collisions
         for (const wall of walls) {
             const wallRect = wall.getBoundingClientRect();
@@ -102,16 +103,40 @@ export function movePacMan() {
                 return true;
             }
         }
-
+        
         return false;
     }
 
+    if (GameOver() && !ghost_dead) {
+        pacMan.style.transform = `translate(0px, 0px) rotate(0deg)`;
+        pacManPosition = { x: 0, y: 0 };
+        pacManVelocity = { x: 0, y: 0 };
+        ghosts.forEach((ghost) => {
+            ghost.style.transform = `translate(0px, 0px)`;
+        })
+        resite()
+        pacManRotation = 0;
+        lifesDisplay.textContent -= 1;
+        if (lifesDisplay.textContent == 0) {
+            const gameOver = document.querySelectorAll(".grid > div");
+            gameOver.forEach((cell) => {
+                cell.remove();
+            })
+            const gameOvermessage = document.querySelector(".grid");
+            let message = document.createElement("h1");
+            message.classList.add("game-over");
+            message.textContent = "Game Over";
+            gameOvermessage.appendChild(message);
+        }
+        return;
+    }
+    
     // Calculate new position for next direction
     const nextPosition = {
         x: currentPosition.x + nextDirection.velocity.x,
         y: currentPosition.y + nextDirection.velocity.y,
     };
-
+    
     // Check if next direction is valid
     if (!checkCollision(nextPosition)) {
         // Move in the next direction
@@ -149,15 +174,16 @@ export function movePacMan() {
         return
     }
     
-
+    
     // Calculate new position for current direction
     const currentDirectionPosition = {
         x: currentPosition.x + pacManVelocity.x,
         y: currentPosition.y + pacManVelocity.y,
     };
-
+    
     // Check if current direction is valid
     if (!checkCollision(currentDirectionPosition)) {
+        console.log("moving pac man");
         // Keep moving in the current direction
         pacManPosition = currentDirectionPosition;
         pacMan.style.transform = `translate(${pacManPosition.x}px, ${pacManPosition.y}px) rotate(${pacManRotation}deg)`;
@@ -221,6 +247,19 @@ function checkCollectibles(pacManRect) {
             prize.play();
             score += 50;
             scoreDisplay.textContent = score;
+            const p = document.querySelectorAll(".power-pellet");
+            if (p.length === 0 ) {
+                const gameOver = document.querySelectorAll(".grid > div");
+                gameOver.forEach((cell) => {
+                    cell.remove();
+                })
+                const gameOvermessage = document.querySelector(".grid");
+                let message = document.createElement("h1");
+                message.classList.add("game-over");
+                message.textContent = "You Won";
+                gameOvermessage.appendChild(message);            }
+
+
         }
     });
 
