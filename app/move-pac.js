@@ -118,6 +118,8 @@ export function movePacMan() {
         pacManRotation = 0;
         lifesDisplay.textContent -= 1;
         if (lifesDisplay.textContent == 0) {
+            const death = document.getElementById("death");
+            death.play();
             const gameOver = document.querySelectorAll(".grid > div");
             gameOver.forEach((cell) => {
                 cell.remove();
@@ -159,6 +161,8 @@ export function movePacMan() {
             pacManRotation = 0;
             lifesDisplay.textContent -= 1;
             if (lifesDisplay.textContent == 0) {
+                const death = document.getElementById("death");
+                death.play();
                 const gameOver = document.querySelectorAll(".grid > div");
                 gameOver.forEach((cell) => {
                     cell.remove();
@@ -202,6 +206,8 @@ export function movePacMan() {
             pacManRotation = 0;
             lifesDisplay.textContent -= 1;
             if (lifesDisplay.textContent == 0) {
+                const death = document.getElementById("death");
+                death.play();
                 const gameOver = document.querySelectorAll(".grid > div");
                 gameOver.forEach((cell) => {
                     cell.remove();
@@ -247,7 +253,7 @@ function checkCollectibles(pacManRect) {
             prize.play();
             score += 50;
             scoreDisplay.textContent = score;
-            const p = document.querySelectorAll(".power-pellet");
+            const p = document.querySelectorAll(".pac-dot");
             if (p.length === 0 ) {
                 const gameOver = document.querySelectorAll(".grid > div");
                 gameOver.forEach((cell) => {
@@ -258,8 +264,6 @@ function checkCollectibles(pacManRect) {
                 message.classList.add("game-over");
                 message.textContent = "You Won";
                 gameOvermessage.appendChild(message);            }
-
-
         }
     });
 
