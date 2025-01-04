@@ -120,13 +120,8 @@ h3 {
     position: relative;
 }
 
+
 .ghost.blinky {
-    /* background-image: url('./img/ghost.webp');
-    background-size: contain; 
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 20px;  
-    height: 20px; */
     background-color: red;
     
 }
@@ -138,16 +133,21 @@ h3 {
 .ghost.inky { 
     background-color: #00FFFF; /* Inky's cyan */
 }
-
+.game-over {
+    padding: 250px 0px 0px 200px;
+}
 .ghost.clyde { 
     background-color: #FFB852; /* Clyde's orange */
     /* animation: flash 0.4s infinite; */
 }
-
 .ghost-lair {
     background-color: black;
     /* animation: flash 0.4s infinite; */
 }
+.ghost_dead {
+    background-color: cornflowerblue  !important;
+}
+
 .buttons {
     padding: 10px;
     background-color: transparent;

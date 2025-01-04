@@ -201,7 +201,7 @@ function NextMoveGost(move) {
          let newX = x;
          let newY = y;
  
-         if (newX == 58  && (newY == -40 || newY == 0)) {
+         if (newX == 58  && (newY == -20 || newY == 20)) {
              newY -= speedghost
          }else if (move === 'left') {
              newX -= speedghost;
