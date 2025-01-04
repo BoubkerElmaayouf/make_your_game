@@ -6,17 +6,13 @@
 }
 
 body {
-    /* background-image: url(./img/background_pattern.png);
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat; */
     background-color: #000000;
     font-family: 'Press Start 2P', 'Courier New', monospace;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    height: 100vh;
     color: #FFFF00;
     overflow: hidden;
 }
@@ -25,7 +21,7 @@ body {
     text-align: center;
     padding: 20px;
     background-color: #000000;
-    border: 4px solid #00F;
+    border: 04px solid #00F;
     border-radius: 0;
     position: relative;
 }
@@ -71,7 +67,7 @@ h3 {
     /* border: solid 4px #2121FF; */
     margin: 20px auto;
     background-color: #000000;
-    box-shadow: 0 0 20px #2121FF;
+    /* box-shadow: 0 0 20px #2121FF; */
 }
 
 /* Individual grid cell */
@@ -83,19 +79,21 @@ h3 {
 /* Game elements */
 .pac-dot {
     background-color: #FFFF00;
-    border: 8px solid #000000;
     border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    border: 8px solid #000000;
 }
 
 .wall {
     background-color: #2121FF;
-    border: 1px solid #2121FF;
-    box-shadow: 0 0 5px #2121FF;
+    /* box-shadow: 0 0 5px #2121FF; */
 }
 
 .power-pellet {
     background-color: #FFFF00;
-    border: 5px solid #000000;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     animation: blink 0.4s infinite;
 }
@@ -103,7 +101,6 @@ h3 {
 
 /* HTML: <div class="pacman"></div> */
 .pac-man {
-    height: 120px;
     aspect-ratio: 1;
     border-radius: 50%;
     background: 
@@ -142,7 +139,6 @@ h3 {
 }
 .ghost-lair {
     background-color: black;
-    /* animation: flash 0.4s infinite; */
 }
 .ghost_dead {
     background-color: cornflowerblue  !important;
@@ -215,11 +211,25 @@ h3 {
 
 /* Responsive design */
 @media (max-width: 600px) {
+    #pattern {
+        width: 280px;
+        height: 280px;
+    }
     .grid {
         width: 280px;
         height: 280px;
     }
-    
+    div .pac-dot {
+        width: 3px;
+        height: 3px;
+    border: 1px solid #000000;
+
+    }
+     .power-pellet {
+        width: 10px;
+        height: 10px;
+
+    }
     .grid div {
         width: 10px;
         height: 10px;
@@ -233,3 +243,40 @@ h3 {
         font-size: 1.5rem;
     }
 }
+
+@media (max-width: 393px) {
+    #pattern {
+        width: 140px; /* Slightly smaller than screen width for padding/margins */
+        height: 140px;
+    }
+    .grid {
+        width: 140px; /* Slightly smaller than screen width for padding/margins */
+        height: 140px;
+    }
+
+    .grid div {
+        width: 5px;
+        height: 5px;
+    }
+    div .pac-dot {
+        width: 5px;
+        height: 5px;
+    }
+    .power-pellet {
+        width: 5px;
+        height: 5px;
+    } 
+
+    h3 {
+        font-size: 0.75rem; /* Scaled-down font size for smaller screen */
+    }
+
+    .hero::before {
+        font-size: 1.3rem; /* Adjust font size to maintain readability */
+    }
+
+    body {
+        padding: 10px; /* Ensure spacing for smaller screen */
+    }
+}
+

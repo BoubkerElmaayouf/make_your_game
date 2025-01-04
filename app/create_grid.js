@@ -72,8 +72,7 @@ export function createGrid() {
         }
         if (index === 489) {
             square.classList.add("pac-man");
-            // square.style.height = "16px"
-            // square.style.width = "16px"
+          
         }
         grid.appendChild(square);
     });
