@@ -6,7 +6,7 @@ import {
     updatePositions
 } from './start_game.js'
 
-import {animationId , animationIdg } from './start_game.js'
+import { animationId, animationIdg } from './start_game.js'
 
 let pacManRotation = 0;
 let pacManPosition = { x: 0, y: 0 };
@@ -31,27 +31,27 @@ pause.addEventListener("click", () => {
         isMoving = true; // Allow movement again
         isPaused = false; // Update state
         pause.textContent = "Pause";
-        requestAnimationFrame(updatePositions);  
+        requestAnimationFrame(updatePositions);
 
-        requestAnimationFrame(gameLoop);  
+        requestAnimationFrame(gameLoop);
         console.log("Game Resumed");
     }
 });
 
 export function movePacMan() {
-    
+
     if (isPaused || !isMoving) {
         return; // Stop movement if the game is paused or not moving
     }
-    
+
     const walls = document.querySelectorAll(".wall");
     const pacMan = document.querySelector(".pac-man");
     const ghostLairs = document.querySelectorAll(".ghost-lair");
     const ghosts = document.querySelectorAll(".ghost");
-    
+
     // Store current position
     let currentPosition = { x: pacManPosition.x, y: pacManPosition.y };
-    
+
     // Helper function to check collisions
     function GameOver() {
         for (const ghost of ghosts) {
@@ -73,14 +73,14 @@ export function movePacMan() {
     function checkCollision(position) {
         // Temporarily move Pac-Man to test collision
         if (!pacMan) {
-            return 
+            return
         }
         pacMan.style.transform = `translate(${position.x}px, ${position.y}px) rotate(${pacManRotation}deg)`;
         const pacManRect = pacMan.getBoundingClientRect();
-        
+
         // Reset position
         pacMan.style.transform = `translate(${currentPosition.x}px, ${currentPosition.y}px) rotate(${pacManRotation}deg)`;
-        
+
         // Check ghost lair collision
         for (const ghostLair of ghostLairs) {
             const ghostLairRect = ghostLair.getBoundingClientRect();
@@ -93,7 +93,7 @@ export function movePacMan() {
                 return true;
             }
         }
-        
+
         // Check wall collisions
         for (const wall of walls) {
             const wallRect = wall.getBoundingClientRect();
@@ -106,7 +106,7 @@ export function movePacMan() {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -132,16 +132,18 @@ export function movePacMan() {
             message.classList.add("game-over");
             message.textContent = "Game Over";
             gameOvermessage.appendChild(message);
+            const pause = document.getElementById("pause");
+            pause.style.display = "none"
         }
         return;
     }
-    
+
     // Calculate new position for next direction
     const nextPosition = {
         x: currentPosition.x + nextDirection.velocity.x,
         y: currentPosition.y + nextDirection.velocity.y,
     };
-    
+
     // Check if next direction is valid
     if (!checkCollision(nextPosition)) {
         // Move in the next direction
@@ -178,19 +180,21 @@ export function movePacMan() {
                 message.classList.add("game-over");
                 message.textContent = "Game Over";
                 gameOvermessage.appendChild(message);
+                const pause = document.getElementById("pause");
+                pause.style.display = "none"
             }
             return;
         }
         return
     }
-    
-    
+
+
     // Calculate new position for current direction
     const currentDirectionPosition = {
         x: currentPosition.x + pacManVelocity.x,
         y: currentPosition.y + pacManVelocity.y,
     };
-    
+
     // Check if current direction is valid
     if (!checkCollision(currentDirectionPosition)) {
         console.log("moving pac man");
@@ -223,10 +227,12 @@ export function movePacMan() {
                 message.classList.add("game-over");
                 message.textContent = "Game Over";
                 gameOvermessage.appendChild(message);
+                const pause = document.getElementById("pause");
+                pause.style.display = "none"
             }
             return;
         }
-        return 
+        return
     }
 }
 
@@ -259,39 +265,42 @@ function checkCollectibles(pacManRect) {
             prize.play();
             score += 50;
             scoreDisplay.textContent = score;
-            const p = document.querySelectorAll(".pac-dot");
-            if (p.length === 0 ) {
-                const gameOver = document.querySelectorAll(".grid > div");
-                gameOver.forEach((cell) => {
-                    cell.remove();
-                })
-                const gameOvermessage = document.querySelector(".grid");
-                let message = document.createElement("h1");
-                message.classList.add("game-over");
-                message.textContent = "You Won";
-                gameOvermessage.appendChild(message);            }
         }
-    });
+    })
 
-    const pacDots = document.querySelectorAll(".pac-dot");
-    pacDots.forEach((dot) => {
-        const dotRect = dot.getBoundingClientRect();
-        if (
-            pacManRect.left < dotRect.right &&
-            pacManRect.right > dotRect.left &&
-            pacManRect.top < dotRect.bottom &&
-            pacManRect.bottom > dotRect.top
-        ) {
-            // Collect pac-dot
-            dot.classList.remove("pac-dot");
-            const eat_dots = document.getElementById("eat-dots");
-            eat_dots.play();
-            score += 10;
-            scoreDisplay.textContent = score;
-        }
-    });
-    // let pacManVelocity = 5  
 
+    let pacDots = document.querySelectorAll(".pac-dot");
+    if (!pacDots) {
+        const gameOver = document.querySelectorAll(".grid > div");
+        gameOver.forEach((cell) => {
+            cell.remove();
+        })
+        const gameOvermessage = document.querySelector(".grid");
+        let message = document.createElement("h1");
+        message.classList.add("game-over");
+        message.textContent = "You Won";
+        gameOvermessage.appendChild(message);
+        const pause = document.getElementById("pause");
+        pause.style.display = "none"
+    } else {
+
+        pacDots.forEach((dot) => {
+            const dotRect = dot.getBoundingClientRect();
+            if (
+                pacManRect.left < dotRect.right &&
+                pacManRect.right > dotRect.left &&
+                pacManRect.top < dotRect.bottom &&
+                pacManRect.bottom > dotRect.top
+            ) {
+                // Collect pac-dot
+                dot.classList.remove("pac-dot");
+                const eat_dots = document.getElementById("eat-dots");
+                eat_dots.play();
+                score += 10;
+                scoreDisplay.textContent = score;
+            }
+        });
+    }
 }
 
 let isMoving = true
