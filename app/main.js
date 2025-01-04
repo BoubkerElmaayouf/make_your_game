@@ -36,6 +36,7 @@ function Pac_Man() {
 }
 
 window.addEventListener("resize", () => {
+    
     location.reload();
   });
   

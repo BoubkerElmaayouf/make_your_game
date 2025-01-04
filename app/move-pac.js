@@ -270,19 +270,26 @@ function checkCollectibles(pacManRect) {
 
 
     let pacDots = document.querySelectorAll(".pac-dot");
-    if (!pacDots) {
-        const gameOver = document.querySelectorAll(".grid > div");
-        gameOver.forEach((cell) => {
-            cell.remove();
-        })
-        const gameOvermessage = document.querySelector(".grid");
-        let message = document.createElement("h1");
-        message.classList.add("game-over");
-        message.textContent = "You Won";
-        gameOvermessage.appendChild(message);
-        const pause = document.getElementById("pause");
-        pause.style.display = "none"
-    } else {
+    pacDots = document.querySelectorAll(".pac-dot");
+    if (pacDots) {
+        if (pacDots.length === 0 ) {
+            console.log("hello")
+            const gameOver = document.querySelectorAll(".grid > div");
+            gameOver.forEach((cell) => {
+                cell.remove();
+            })
+            const gameOvermessage = document.querySelector(".grid");
+            let message = document.createElement("h1");
+            message.classList.add("game-over");
+            message.textContent = "You Won";
+            gameOvermessage.appendChild(message);
+            const pause = document.getElementById("pause");
+            pause.style.display = "none"
+            return 
+        }
+
+        console.log(pacDots.length);
+        
 
         pacDots.forEach((dot) => {
             const dotRect = dot.getBoundingClientRect();
