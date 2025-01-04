@@ -109,7 +109,11 @@ export function updatePositions() {
     const ghostNames = Object.keys(ghostPositions);
 
     ghostNames.forEach((ghostName) => {
+
         const ghost = document.querySelector(`.${ghostName}`);
+        if (!ghost) {
+            return
+        }
         let move = ghostMoves[ghostName] || getRandomMove(); // Use the ghost's last move or get a new one.
 
         let { x, y } = ghostPositions[ghostName];

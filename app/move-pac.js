@@ -31,9 +31,9 @@ pause.addEventListener("click", () => {
         isMoving = true; // Allow movement again
         isPaused = false; // Update state
         pause.textContent = "Pause";
-        animationIdg = requestAnimationFrame(updatePositions);  
+        requestAnimationFrame(updatePositions);  
 
-        animationId = requestAnimationFrame(gameLoop);  
+        requestAnimationFrame(gameLoop);  
         console.log("Game Resumed");
     }
 });
@@ -72,6 +72,9 @@ export function movePacMan() {
     // Temporarily move
     function checkCollision(position) {
         // Temporarily move Pac-Man to test collision
+        if (!pacMan) {
+            return 
+        }
         pacMan.style.transform = `translate(${position.x}px, ${position.y}px) rotate(${pacManRotation}deg)`;
         const pacManRect = pacMan.getBoundingClientRect();
         
@@ -145,6 +148,9 @@ export function movePacMan() {
         pacManPosition = nextPosition;
         pacManVelocity = nextDirection.velocity;
         pacManRotation = nextDirection.rotation;
+        if (!pacMan) {
+            return
+        }
         pacMan.style.transform = `translate(${pacManPosition.x}px, ${pacManPosition.y}px) rotate(${pacManRotation}deg)`;
 
         // Check collectibles
