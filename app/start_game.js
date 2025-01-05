@@ -15,9 +15,7 @@ export let ghostPositions = {
 };
 
 let lifes = 3;
-let lastFrameTime = 0;
 export let animationId;
-const speed = 50; // Movement speed in pixels per frame
 let speedghost = 2;
 let score = 0;
 export let animationIdg
@@ -26,15 +24,9 @@ export function resite() {
     Object.keys(ghostPositions).forEach(ghost => ghostPositions[ghost] = { x: 0, y: 0 });
 }
 
-export function gameLoop(timestamp) {
-    const deltaTime = timestamp - lastFrameTime;
-
-    if (deltaTime >= speed) {
+export function gameLoop() {
         movePacMan();
         updateTime();
-        lastFrameTime = timestamp;
-    }
-
     animationId = requestAnimationFrame(gameLoop);
 }
 
@@ -47,14 +39,13 @@ export function startGame() {
     const pattern = document.getElementById("pattern");
     pattern.style.display = "none";
 
-    lastFrameTime = performance.now();
     animationIdg = requestAnimationFrame(updatePositions);
     animationId = requestAnimationFrame(gameLoop);
 }
 
-function updateTime() {
-    const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-    timeDisplay.textContent = elapsedTime;
+export function updateTime() {
+        let elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+        timeDisplay.textContent = elapsedTime;
 }
 
 function getRandomMove(previousMove) {

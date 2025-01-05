@@ -234,8 +234,10 @@ function checkCollectibles(pacManRect) {
     let pacDots = document.querySelectorAll(".pac-dot");
     if (pacDots) {
         if (pacDots.length === 0 ) {
-            const death = document.getElementById("death");
-            death.play();
+            const win = document.getElementById("win");
+            win.play();
+            updateTime(true)
+            
         
             const gameOver = document.querySelectorAll(".grid > div");
             gameOver.forEach((cell) => {
@@ -243,7 +245,7 @@ function checkCollectibles(pacManRect) {
             });
         
             const gameOverMessageContainer = document.querySelector(".grid");
-            let message = document.createElement("h1");
+            let message = document.createElement("div");
             message.classList.add("game-over");
             message.textContent = "you win 🥳";
             gameOverMessageContainer.appendChild(message);
@@ -278,16 +280,16 @@ document.addEventListener("keydown", (e) => {
     switch (e.key) {
         case "ArrowUp":
 
-            queueDirection({ x: 0, y: -5 }, -90);
+            queueDirection({ x: 0, y: -2 }, -90);
             break;
         case "ArrowDown":
-            queueDirection({ x: 0, y: 5 }, 90);
+            queueDirection({ x: 0, y: 2 }, 90);
             break;
         case "ArrowLeft":
-            queueDirection({ x: -5, y: 0 }, 180);
+            queueDirection({ x: -2, y: 0 }, 180);
             break;
         case "ArrowRight":
-            queueDirection({ x: 5, y: 0 }, 0);
+            queueDirection({ x: 2, y: 0 }, 0);
             break;
 
     }
@@ -302,14 +304,13 @@ function queueDirection(velocity, rotation) {
 function handleGameOver() {
     const death = document.getElementById("death");
     death.play();
-
     const gameOver = document.querySelectorAll(".grid > div");
     gameOver.forEach((cell) => {
         cell.remove();
     });
 
     const gameOverMessageContainer = document.querySelector(".grid");
-    let message = document.createElement("h1");
+    let message = document.createElement("div");
     message.classList.add("game-over");
     message.textContent = "Game Over";
     gameOverMessageContainer.appendChild(message);
