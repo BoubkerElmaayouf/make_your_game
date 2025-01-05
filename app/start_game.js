@@ -13,6 +13,7 @@ export let ghostPositions = {
     blinky: { x: 0, y: 0 },
     clyde: { x: 0, y: 0 }
 };
+export const End = { value: false };
 
 let lifes = 3;
 export let animationId;
@@ -26,8 +27,10 @@ export function resite() {
 
 export function gameLoop() {
         movePacMan();
-        updateTime();
-    animationId = requestAnimationFrame(gameLoop);
+        if (!End.value) {
+            updateTime();
+        }
+          animationId = requestAnimationFrame(gameLoop);
 }
 
 export function startGame() {

@@ -3,7 +3,8 @@ import {
     lifesDisplay,
     resite,
     gameLoop,
-    updatePositions
+    updatePositions,
+    End
 } from './start_game.js'
 
 import { animationId, animationIdg } from './start_game.js'
@@ -236,8 +237,7 @@ function checkCollectibles(pacManRect) {
         if (pacDots.length === 0 ) {
             const win = document.getElementById("win");
             win.play();
-            updateTime(true)
-            
+End.value = true             
         
             const gameOver = document.querySelectorAll(".grid > div");
             gameOver.forEach((cell) => {
@@ -302,6 +302,7 @@ function queueDirection(velocity, rotation) {
 
 
 function handleGameOver() {
+    End.value = true 
     const death = document.getElementById("death");
     death.play();
     const gameOver = document.querySelectorAll(".grid > div");
