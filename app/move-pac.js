@@ -63,7 +63,6 @@ export function movePacMan() {
                 pacManRect.top < ghostRect.bottom &&
                 pacManRect.bottom > ghostRect.top
             ) {
-                console.log("Game Over");
                 return true;
             }
         }
@@ -197,7 +196,6 @@ export function movePacMan() {
 
     // Check if current direction is valid
     if (!checkCollision(currentDirectionPosition)) {
-        console.log("moving pac man");
         // Keep moving in the current direction
         pacManPosition = currentDirectionPosition;
         pacMan.style.transform = `translate(${pacManPosition.x}px, ${pacManPosition.y}px) rotate(${pacManRotation}deg)`;
@@ -273,7 +271,6 @@ function checkCollectibles(pacManRect) {
     pacDots = document.querySelectorAll(".pac-dot");
     if (pacDots) {
         if (pacDots.length === 0 ) {
-            console.log("hello")
             const gameOver = document.querySelectorAll(".grid > div");
             gameOver.forEach((cell) => {
                 cell.remove();
@@ -288,7 +285,6 @@ function checkCollectibles(pacManRect) {
             return 
         }
 
-        console.log(pacDots.length);
         
 
         pacDots.forEach((dot) => {

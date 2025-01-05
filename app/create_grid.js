@@ -48,8 +48,6 @@ export function createGrid() {
                 square.classList.add("wall");
                 break;
             case 2:
-                // square.classList.add("ghost-lair");
-                // square.textContent = index
                 if (index === 434 || index === 405 || index === 378 || index === 349) {
                     square.classList.add("ghost");
                     if (index === 434) square.classList.add("pinky");

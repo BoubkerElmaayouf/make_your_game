@@ -20,7 +20,7 @@ export let animationId;
 const speed = 50; // Movement speed in pixels per frame
 let speedghost = 2;
 let score = 0;
-export let animationIdg 
+export let animationIdg
 
 export function resite() {
     Object.keys(ghostPositions).forEach(ghost => ghostPositions[ghost] = { x: 0, y: 0 });
@@ -43,12 +43,12 @@ export function startGame() {
     lifesDisplay.textContent = lifes;
     timeDisplay.textContent = 0;
 
-    moveGhosts()
 
     const pattern = document.getElementById("pattern");
     pattern.style.display = "none";
 
     lastFrameTime = performance.now();
+    animationIdg = requestAnimationFrame(updatePositions);
     animationId = requestAnimationFrame(gameLoop);
 
 }
@@ -133,11 +133,7 @@ export function updatePositions() {
         }
 
         if (isGhostDead(ghost) && ghost_dead) {
-            ghost.style.transform = `translate(0px, 0px)`;
-            ghost.classList.remove("ghost_dead");
             ghostPositions[ghostName] = { x: 0, y: 0 };
-            ghostMoves[ghostName] = null; // Reset move for the ghost.
-            console.log(`Game Over ${ghostName}`);
         }
 
         ghost.style.transform = `translate(${ghostPositions[ghostName].x}px, ${ghostPositions[ghostName].y}px)`;
@@ -145,8 +141,3 @@ export function updatePositions() {
 
     animationIdg = requestAnimationFrame(updatePositions);
 }
-
-export function moveGhosts() {
-    animationIdg = requestAnimationFrame(updatePositions);
-}
-
