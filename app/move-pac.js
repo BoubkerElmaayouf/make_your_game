@@ -120,19 +120,7 @@ export function movePacMan() {
         pacManRotation = 0;
         lifesDisplay.textContent -= 1;
         if (lifesDisplay.textContent == 0) {
-            const death = document.getElementById("death");
-            death.play();
-            const gameOver = document.querySelectorAll(".grid > div");
-            gameOver.forEach((cell) => {
-                cell.remove();
-            })
-            const gameOvermessage = document.querySelector(".grid");
-            let message = document.createElement("h1");
-            message.classList.add("game-over");
-            message.textContent = "Game Over";
-            gameOvermessage.appendChild(message);
-            const pause = document.getElementById("pause");
-            pause.style.display = "none"
+            handleGameOver()
         }
         return;
     }
@@ -168,19 +156,7 @@ export function movePacMan() {
             pacManRotation = 0;
             lifesDisplay.textContent -= 1;
             if (lifesDisplay.textContent == 0) {
-                const death = document.getElementById("death");
-                death.play();
-                const gameOver = document.querySelectorAll(".grid > div");
-                gameOver.forEach((cell) => {
-                    cell.remove();
-                })
-                const gameOvermessage = document.querySelector(".grid");
-                let message = document.createElement("h1");
-                message.classList.add("game-over");
-                message.textContent = "Game Over";
-                gameOvermessage.appendChild(message);
-                const pause = document.getElementById("pause");
-                pause.style.display = "none"
+                handleGameOver()
             }
             return;
         }
@@ -214,19 +190,7 @@ export function movePacMan() {
             pacManRotation = 0;
             lifesDisplay.textContent -= 1;
             if (lifesDisplay.textContent == 0) {
-                const death = document.getElementById("death");
-                death.play();
-                const gameOver = document.querySelectorAll(".grid > div");
-                gameOver.forEach((cell) => {
-                    cell.remove();
-                })
-                const gameOvermessage = document.querySelector(".grid");
-                let message = document.createElement("h1");
-                message.classList.add("game-over");
-                message.textContent = "Game Over";
-                gameOvermessage.appendChild(message);
-                const pause = document.getElementById("pause");
-                pause.style.display = "none"
+               handleGameOver()
             }
             return;
         }
@@ -268,25 +232,12 @@ function checkCollectibles(pacManRect) {
 
 
     let pacDots = document.querySelectorAll(".pac-dot");
-    pacDots = document.querySelectorAll(".pac-dot");
     if (pacDots) {
         if (pacDots.length === 0 ) {
-            const gameOver = document.querySelectorAll(".grid > div");
-            gameOver.forEach((cell) => {
-                cell.remove();
-            })
-            const gameOvermessage = document.querySelector(".grid");
-            let message = document.createElement("h1");
-            message.classList.add("game-over");
-            message.textContent = "You Won";
-            gameOvermessage.appendChild(message);
-            const pause = document.getElementById("pause");
-            pause.style.display = "none"
+            handleGameOver()
             return 
         }
-
         
-
         pacDots.forEach((dot) => {
             const dotRect = dot.getBoundingClientRect();
             if (
@@ -332,3 +283,22 @@ function queueDirection(velocity, rotation) {
     nextDirection = { velocity, rotation }
 }
 
+
+function handleGameOver() {
+    const death = document.getElementById("death");
+    death.play();
+
+    const gameOver = document.querySelectorAll(".grid > div");
+    gameOver.forEach((cell) => {
+        cell.remove();
+    });
+
+    const gameOverMessageContainer = document.querySelector(".grid");
+    let message = document.createElement("h1");
+    message.classList.add("game-over");
+    message.textContent = "Game Over";
+    gameOverMessageContainer.appendChild(message);
+
+    const pause = document.getElementById("pause");
+    pause.style.display = "none";
+}

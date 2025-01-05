@@ -59,15 +59,14 @@ h3 {
 
 /* Game grid styles */
 .grid {
-    /* position: relative; */
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
     width: 560px;
     height: 560px;
-    /* border: solid 4px #2121FF; */
     margin: 20px auto;
     background-color: #000000;
-    /* box-shadow: 0 0 20px #2121FF; */
 }
 
 /* Individual grid cell */
@@ -75,7 +74,17 @@ h3 {
     width: 20px;
     height: 20px;
 }
-
+.game-over {
+    width: 560px;
+    height: 560px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFFF00;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+}
 /* Game elements */
 .pac-dot {
     background-color: #FFFF00;
@@ -130,9 +139,7 @@ h3 {
 .ghost.inky { 
     background-color: #00FFFF; /* Inky's cyan */
 }
-.game-over {
-    padding: 250px 0px 0px 200px;
-}
+
 .ghost.clyde { 
     background-color: #FFB852; /* Clyde's orange */
     /* animation: flash 0.4s infinite; */
