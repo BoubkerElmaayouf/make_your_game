@@ -199,7 +199,7 @@ export function movePacMan() {
 }
 
 function checkCollectibles(pacManRect) {
-    let r
+   
     const powerPellets = document.querySelectorAll(".power-pellet");
     powerPellets.forEach((pellet) => {
         const pelletRect = pellet.getBoundingClientRect();
@@ -211,7 +211,7 @@ function checkCollectibles(pacManRect) {
         ) {
             ghost_dead = true;
             const ghosts = document.querySelectorAll(".ghost");
-            r = setTimeout(() => {
+            let ghost_afraid = setTimeout(() => {
                 ghosts.forEach((ghost) => {
                     ghost.classList.remove("ghost_dead");
                 })
@@ -234,7 +234,22 @@ function checkCollectibles(pacManRect) {
     let pacDots = document.querySelectorAll(".pac-dot");
     if (pacDots) {
         if (pacDots.length === 0 ) {
-            handleGameOver()
+            const death = document.getElementById("death");
+            death.play();
+        
+            const gameOver = document.querySelectorAll(".grid > div");
+            gameOver.forEach((cell) => {
+                cell.remove();
+            });
+        
+            const gameOverMessageContainer = document.querySelector(".grid");
+            let message = document.createElement("h1");
+            message.classList.add("game-over");
+            message.textContent = "you win 🥳";
+            gameOverMessageContainer.appendChild(message);
+        
+            const pause = document.getElementById("pause");
+            pause.style.display = "none";
             return 
         }
         

@@ -50,7 +50,6 @@ export function startGame() {
     lastFrameTime = performance.now();
     animationIdg = requestAnimationFrame(updatePositions);
     animationId = requestAnimationFrame(gameLoop);
-
 }
 
 function updateTime() {
